@@ -15,7 +15,7 @@ class App extends Component {
       storageValue: 0,
       web3: null,
       contract: null,
-      account: null,
+      account: null
     }
   }
 
