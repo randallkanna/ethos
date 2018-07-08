@@ -13,7 +13,9 @@ class App extends Component {
 
     this.state = {
       storageValue: 0,
-      web3: null
+      web3: null,
+      contract: null,
+      account: null
     }
   }
 
@@ -44,8 +46,8 @@ class App extends Component {
      */
 
     const contract = require('truffle-contract')
-    const simpleStorage = contract(SimpleStorageContract)
-    simpleStorage.setProvider(this.state.web3.currentProvider)
+    const simpleStorage = contract(SimpleStorageContract) // TODO: Fix this later
+    simpleStorage.setProvider(this.state.web3.currentProvider)  // TODO: Fix this later
 
     // Declaring this for later so we can chain functions on SimpleStorage.
     var simpleStorageInstance
@@ -62,8 +64,24 @@ class App extends Component {
         return simpleStorageInstance.get.call(accounts[0])
       }).then((result) => {
         // Update state with the result.
-        return this.setState({ storageValue: result.c[0] })
+        return this.setState({ storageValue: result.c[0], contract: simpleStorageInstance, account: accounts[0] })
       })
+    })
+  }
+
+  handleClick() {
+    const contract = this.state.contract
+    const account = this.state.account
+
+    var value = 3
+
+
+    contract.set(value, {from: account})
+      .then(result => {
+        return contract.get.call()
+          .then(result => {
+            return this.setState({storageValue: result.contract[0]})
+          })
     })
   }
 
@@ -83,6 +101,7 @@ class App extends Component {
               <p>If your contracts compiled and migrated successfully, below will show a stored value of 5 (by default).</p>
               <p>Try changing the value stored on <strong>line 59</strong> of App.js.</p>
               <p>The stored value is: {this.state.storageValue}</p>
+              <button onClick={this.handleClick.bind(this)}>Set storage</button>
             </div>
           </div>
         </main>
