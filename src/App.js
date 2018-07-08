@@ -13,7 +13,9 @@ class App extends Component {
 
     this.state = {
       storageValue: 0,
-      web3: null
+      web3: null,
+      contract: null,
+      account: null,
     }
   }
 
@@ -44,8 +46,8 @@ class App extends Component {
      */
 
     const contract = require('truffle-contract')
-    const simpleStorage = contract(SimpleStorageContract)
-    simpleStorage.setProvider(this.state.web3.currentProvider)
+    const simpleStorage = contract(SimpleStorageContract) // TODO: Fix this later
+    simpleStorage.setProvider(this.state.web3.currentProvider)  // TODO: Fix this later
 
     // Declaring this for later so we can chain functions on SimpleStorage.
     var simpleStorageInstance
