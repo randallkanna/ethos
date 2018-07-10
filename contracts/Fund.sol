@@ -7,6 +7,9 @@ contract Fund {
   mapping(uint => Fund) public funds;
   mapping (address => uint) private balances;
 
+	event Deposit(address sender, uint amount);
+  // TODO - Add withdraw event
+
   constructor() {
     owner = msg.sender;
     fundID = 1;
@@ -20,18 +23,15 @@ contract Fund {
   }
 
   function createFund(string _title, string _description) public {
-    // set requires
-    // require a fund cannot be changed or modified unless by owner
+    // set requires    // require a fund cannot be changed or modified unless by owner
     funds[fundID] = Fund({fundTitle: _title, description: _description, id: fundID, fundCreator: msg.sender});
   }
 
-  function donateToFund(uint fundID) public payable {
+  function donateToFund() public payable {
     // find what fund they want to donate to here
-    var fund = funds[fundID];
-
-    // subtract the balance
-    /* balances[msg.sender] += msg.value; */
-
+    // uint fundID
+    /* var fund = funds[fundID]; */
+    Deposit(msg.sender, msg.value);
   }
 
   function withdrawFunds(uint withdrawAmount) public returns (uint remainingBal) {
