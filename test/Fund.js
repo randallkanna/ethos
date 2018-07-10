@@ -1,0 +1,59 @@
+var Fund = artifacts.require("./Fund.sol");
+
+contract('Fund', function(accounts) {
+  const fundOwner = accounts[0];
+  const donater = accounts[1];
+  const secondDonater = accounts[2];
+
+  beforeEach(function() {
+    return Fund.new()
+    .then(function(instance) {
+      fund = instance;
+    });
+  });
+
+  it("a user can create a fund", async () => {
+    const title = "Wildlife Fund ABC";
+    const description = "Save a crypto kitty!";
+
+    await fund.createFund(title, description, {from: fundOwner});
+
+    // assert that the fund was created
+    // assert that the user is the ownwer of the fund
+    // assert.equal()
+  });
+
+  it("should deposit correct amount into the selected fund", async () => {
+    const fundDeposit = web3.toBigNumber(2);
+    const title = "Wildlife Fund ABC";
+    const description = "Save a crypto kitty!";
+
+    await fund.createFund(title, description, {from: fundOwner});
+
+    // await fund.donateToFund({from: donater, value: fundDeposit});
+
+    // verify the fund balance
+    // const balance = await
+
+    //
+    // assert.equal(deposit.plus(1000).toString(), balance, 'deposit amount incorrect, check deposit method');
+  });
+
+  it("should withdraw the entire balance from the fund to the fund owners account", async () => {
+    const fundDeposit = web3.toBigNumber(2);
+    const title = "Wildlife Fund ABC";
+    const description = "Save a crypto kitty!";
+
+    await fund.createFund(title, description, {from: fundOwner});
+
+    // await fund.donateToFund({from: donater, value: fundDeposit});
+
+
+
+    // await fund.withdraw(deposit, {from: alice});
+    //
+    // const balance = await bank.balance({from: alice});
+    //
+    // assert.equal(initialAmount.toString(), balance, 'withdraw amount incorrect, check withdraw method');
+  });
+});
