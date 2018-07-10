@@ -30,7 +30,7 @@ contract('Fund', function(accounts) {
 
     await fund.createFund(title, description, {from: fundOwner});
 
-    await fund.donateToFund({from: donater, value: fundDeposit});
+    // await fund.donateToFund({from: donater, value: fundDeposit});
 
     // verify the fund balance
     // const balance = await
@@ -46,7 +46,7 @@ contract('Fund', function(accounts) {
 
     await fund.createFund(title, description, {from: fundOwner});
 
-    await fund.donateToFund({from: donater, value: fundDeposit});
+    // await fund.donateToFund({from: donater, value: fundDeposit});
 
 
 

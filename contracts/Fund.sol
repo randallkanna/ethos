@@ -14,9 +14,9 @@ contract Fund {
 
   struct Fund {
     address fundCreator;
+    uint id;
     string fundTitle;
     string description;
-    uint id;
   }
 
   function createFund(string _title, string _description) public {
