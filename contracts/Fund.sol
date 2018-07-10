@@ -2,38 +2,41 @@ pragma solidity ^0.4.18;
 
 contract Fund {
   address public owner;
-  address[] public customers;
+  uint fundID;
 
+  mapping(uint => Fund) public funds;
   mapping (address => uint) private balances;
 
   constructor() {
     owner = msg.sender;
+    fundID = 1;
   }
 
   struct Fund {
     address fundCreator;
     string fundTitle;
     string description;
+    uint id;
   }
 
-  function createFund(string title, string description) public {
-
-    // store the fund information here
-
-    // store the user in the Fund struct too
+  function createFund(string _title, string _description) public {
+    // set requires
+    // require a fund cannot be changed or modified unless by owner
+    funds[fundID] = Fund({fundTitle: _title, description: _description, id: fundID, fundCreator: msg.sender});
   }
 
-  function deposit() public payable returns (uint) {
+  function donateToFund(uint fundID) public payable {
     // find what fund they want to donate to here
+    var fund = funds[fundID];
 
     // subtract the balance
     /* balances[msg.sender] += msg.value; */
 
-    return balances[msg.sender];
   }
 
   function withdrawFunds(uint withdrawAmount) public returns (uint remainingBal) {
     require(withdrawAmount <= balances[msg.sender]);
+    require(msg.sender == owner);
 
     balances[msg.sender] -= withdrawAmount;
 

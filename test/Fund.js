@@ -15,52 +15,42 @@ contract('Fund', function(accounts) {
   it("a user can create a fund", async () => {
     const title = "Wildlife Fund ABC";
     const description = "Save a crypto kitty!";
+
     await fund.createFund(title, description, {from: fundOwner});
 
-    // const aliceBalance = await bank.balance({from: alice});
-    // assert.equal(aliceBalance, 1000, 'enroll balance is incorrect, check balance method or constructor');
-    //
-    // const bobBalance = await bank.balance({from: bob});
-    // assert.equal(bobBalance, 1000, 'enroll balance is incorrect, check balance method or constructor');
-    //
-    // const ownerBalance = await bank.balance({from: owner});
-    // assert.equal(ownerBalance, 0, 'only enrolled users should have balance, check balance method or constructor')
+    // assert that the fund was created
+    // assert that the user is the ownwer of the fund
+    // assert.equal()
   });
 
-  it("should deposit correct amount", async () => {
-    // const deposit = web3.toBigNumber(2);
-    //
-    // await bank.enroll({from: alice});
-    // await bank.enroll({from: bob});
-    //
-    // await bank.deposit({from: alice, value: deposit});
-    // const balance = await bank.balance({from: alice});
+  it("should deposit correct amount into the selected fund", async () => {
+    const fundDeposit = web3.toBigNumber(2);
+    const title = "Wildlife Fund ABC";
+    const description = "Save a crypto kitty!";
+
+    await fund.createFund(title, description, {from: fundOwner});
+
+    await fund.donateToFund({from: donater, value: fundDeposit});
+
+    // verify the fund balance
+    // const balance = await
+
     //
     // assert.equal(deposit.plus(1000).toString(), balance, 'deposit amount incorrect, check deposit method');
-    //
-    // const expectedEventResult = {accountAddress: alice, amount: deposit};
-    //
-    // const LogDepositMade = await bank.allEvents();
-    // const log = await new Promise(function(resolve, reject) {
-    //     LogDepositMade.watch(function(error, log){ resolve(log);});
-    // });
-    //
-    // const logAccountAddress = log.args.accountAddress;
-    // const logAmount = log.args.amount.toNumber();
-    //
-    // assert.equal(expectedEventResult.accountAddress, logAccountAddress, "LogDepositMade event accountAddress property not emmitted, check deposit method");
-    // assert.equal(expectedEventResult.amount, logAmount, "LogDepositMade event amount property not emmitted, check deposit method");
   });
 
-  it("should withdraw correct amount", async () => {
-    // const deposit = web3.toBigNumber(2);
-    // const initialAmount = 1000;
-    //
-    // await bank.enroll({from: alice});
-    // await bank.enroll({from: bob});
-    //
-    // await bank.deposit({from: alice, value: deposit});
-    // await bank.withdraw(deposit, {from: alice});
+  it("should withdraw the entire balance from the fund to the fund owners account", async () => {
+    const fundDeposit = web3.toBigNumber(2);
+    const title = "Wildlife Fund ABC";
+    const description = "Save a crypto kitty!";
+
+    await fund.createFund(title, description, {from: fundOwner});
+
+    await fund.donateToFund({from: donater, value: fundDeposit});
+
+
+
+    // await fund.withdraw(deposit, {from: alice});
     //
     // const balance = await bank.balance({from: alice});
     //
