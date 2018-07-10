@@ -24,8 +24,7 @@ contract('Fund', function(accounts) {
   });
 
   it("should withdraw the amount deposited by a user", async () => {
-    // const fundDeposit = web3.toBigNumber(2);
-    const fundDeposit = 2;
+    const fundDeposit = web3.toBigNumber(2);
     const title = "Wildlife Fund ABC";
     const description = "Save a crypto kitty!";
 
@@ -48,13 +47,11 @@ contract('Fund', function(accounts) {
     const description = "Save a crypto kitty!";
 
     await fund.createFund(title, description, {from: fundOwner});
-
-    // await fund.donateToFund({from: donater, value: fundDeposit});
+    await fund.donateToFund({from: donater, value: fundDeposit});
 
     // verify the fund balance?
     // const balance = await
 
-    //
     // assert.equal(deposit.plus(1000).toString(), balance, 'deposit amount incorrect, check deposit method');
   });
 
@@ -64,15 +61,18 @@ contract('Fund', function(accounts) {
     const description = "Save a crypto kitty!";
 
     await fund.createFund(title, description, {from: fundOwner});
+    await fund.donateToFund({from: donater, value: fundDeposit});
 
-    // await fund.donateToFund({from: donater, value: fundDeposit});
+    let fundOwnerOriginalBalance = web3.eth.getBalance(fundOwner).toNumber();
 
+    await fund.withdrawFunds({from: fundOwner, value: fundDeposit});
 
+    let fundOwnerNewBalance = web3.eth.getBalance(fundOwner).toNumber();
 
-    // await fund.withdraw(deposit, {from: alice});
-    //
-    // const balance = await bank.balance({from: alice});
-    //
-    // assert.equal(initialAmount.toString(), balance, 'withdraw amount incorrect, check withdraw method');
+    assert.strictEqual(fundOwnerNewBalance, fundOwnerOriginalBalance + fundDeposit, 'transfers proper amount')
+  });
+
+  it("should not let a random user withdraw from a fund they do not own", async() => {
+
   });
 });

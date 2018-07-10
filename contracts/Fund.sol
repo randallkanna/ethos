@@ -34,15 +34,12 @@ contract Fund {
     Deposit(msg.sender, msg.value);
   }
 
-  function withdrawFunds(uint withdrawAmount) public returns (uint remainingBal) {
-    require(withdrawAmount <= balances[msg.sender]);
+  function withdrawFunds(uint withdrawAmount) public {
     require(msg.sender == owner);
 
-    balances[msg.sender] -= withdrawAmount;
+    /* balances[msg.sender] -= withdrawAmount; */
 
     msg.sender.transfer(withdrawAmount);
-
-    return balances[msg.sender];
   }
 
   function balance() public constant returns (uint) {
