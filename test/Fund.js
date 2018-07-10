@@ -40,6 +40,7 @@ contract('Fund', function(accounts) {
     assert.strictEqual(senderOriginalBalance - fundDeposit - gasUsed, senderNewBalance, 'should withdraw from donaters account');
   });
 
+  // TODO: Implement this test
   // it("should deposit correct amount into the selected fund", async () => {
   //   const fundDeposit = web3.toBigNumber(2);
   //   const title = "Wildlife Fund ABC";
@@ -78,6 +79,6 @@ contract('Fund', function(accounts) {
   });
 
   it("should not allow owners to contribute to their own fund", async() => {
-
+    // TODO: Add test
   })
 });
