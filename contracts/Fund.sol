@@ -10,6 +10,11 @@ contract Fund {
 	event Deposit(address sender, uint amount);
   // TODO - Add withdraw event
 
+  /* event DonatedToFund(
+    address donater;
+    uint256 value;
+  ) */
+
   constructor() {
     owner = msg.sender;
     fundID = 1;
@@ -34,10 +39,8 @@ contract Fund {
     Deposit(msg.sender, msg.value);
   }
 
-  function withdrawFunds(uint withdrawAmount) public {
+  function withdrawFunds(uint withdrawAmount) public payable {
     require(msg.sender == owner);
-
-    /* balances[msg.sender] -= withdrawAmount; */
 
     msg.sender.transfer(withdrawAmount);
   }
