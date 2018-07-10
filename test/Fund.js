@@ -23,6 +23,25 @@ contract('Fund', function(accounts) {
     // assert.equal()
   });
 
+  it("should withdraw the amount deposited by a user", async () => {
+    // const fundDeposit = web3.toBigNumber(2);
+    const fundDeposit = 2;
+    const title = "Wildlife Fund ABC";
+    const description = "Save a crypto kitty!";
+
+    var senderOriginalBalance = web3.eth.getBalance(donater).toNumber();
+
+    await fund.createFund(title, description, {from: fundOwner});
+
+    let transaction = await fund.donateToFund({from: donater, value: fundDeposit});
+
+    var senderNewBalance = web3.eth.getBalance(donater).toNumber();
+    var tx = await web3.eth.getTransaction(transaction.tx);
+    var gasUsed = tx.gasPrice.mul(transaction.receipt.gasUsed).toNumber();
+
+    assert.strictEqual(senderOriginalBalance - fundDeposit - gasUsed, senderNewBalance, 'should withdraw from donaters account');
+  });
+
   it("should deposit correct amount into the selected fund", async () => {
     const fundDeposit = web3.toBigNumber(2);
     const title = "Wildlife Fund ABC";
@@ -32,7 +51,7 @@ contract('Fund', function(accounts) {
 
     // await fund.donateToFund({from: donater, value: fundDeposit});
 
-    // verify the fund balance
+    // verify the fund balance?
     // const balance = await
 
     //
