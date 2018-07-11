@@ -17,6 +17,8 @@ class App extends Component {
       contract: null,
       account: null
     }
+
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentWillMount() {
@@ -39,8 +41,6 @@ class App extends Component {
 
   instantiateContract() {
     /*
-     * SMART CONTRACT EXAMPLE
-     *
      * Normally these functions would be called in the context of a
      * state management library, but for convenience I've placed them here.
      */
@@ -69,48 +69,42 @@ class App extends Component {
     })
   }
 
-  handleClick() {
+  // handleClick() {
+  //   const contract = this.state.contract
+  //   const account = this.state.account
+  //
+  //   var value = 3
+  //
+  //   contract.set(value, {from: account})
+  //     .then(result => {
+  //       return contract.get.call()
+  //         .then(result => {
+  //           return this.setState({storageValue: result.contract[0]})
+  //         })
+  //   })
+  // }
+
+  handleSubmit(event) {
+    // debugger;
+
     const contract = this.state.contract
     const account = this.state.account
 
-    var value = 3
-
-
-    contract.set(value, {from: account})
-      .then(result => {
-        return contract.get.call()
-          .then(result => {
-            return this.setState({storageValue: result.contract[0]})
-          })
-    })
+    // contract.set
+    event.preventDefault();
   }
 
   render() {
     return (
       <div>
-        <h1>Test</h1>
-
-        
+        <h1>Ethos Crowdfunding</h1>
+          <form onSubmit={this.handleSubmit.bind(this)}>
+            <input type="text" name="Fund Name"/>
+            <input type="submit" value="Submit" />
+          </form>
       </div>
-      // <div className="App">
-      //   <nav className="navbar pure-menu pure-menu-horizontal">
-      //       <a href="#" className="pure-menu-heading pure-menu-link">Truffle Box</a>
-      //   </nav>
-      //
-      //   <main className="container">
-      //     <div className="pure-g">
-      //       <div className="pure-u-1-1">
-      //         <h1>Good to Go!</h1>
-      //         <p>Your Truffle Box is installed and ready.</p>
-      //         <h2>Smart Contract Example</h2>
-      //         <p>If your contracts compiled and migrated successfully, below will show a stored value of 5 (by default).</p>
-      //         <p>Try changing the value stored on <strong>line 59</strong> of App.js.</p>
-      //         <p>The stored value is: {this.state.storageValue}</p>
-      //         <button onClick={this.handleClick.bind(this)}>Set storage</button>
-      //       </div>
-      //     </div>
-      //   </main>
-      // </div>
+//         <p>The stored value is: {this.state.storageValue}</p>
+//         <button onClick={this.handleClick.bind(this)}>Set storage</button>
     );
   }
 }
