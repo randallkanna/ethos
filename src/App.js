@@ -96,13 +96,15 @@ class App extends Component {
 
   render() {
     return (
-      <div>
-        <h1>Ethos Crowdfunding</h1>
-          <form onSubmit={this.handleSubmit.bind(this)}>
-            <input type="text" name="Fund Name"/>
-            <input type="submit" value="Submit" />
-          </form>
-      </div>
+        <div>
+          <h1>Ethos Crowdfunding</h1>
+            <div className="form-group">
+              <form onSubmit={this.handleSubmit.bind(this)}>
+                <input type="text" name="Fund Name" className="form-control" placeholder="Enter Fund Name" />
+                <input type="submit" value="Submit" className="btn btn-dark" />
+              </form>
+            </div>
+        </div>
 //         <p>The stored value is: {this.state.storageValue}</p>
 //         <button onClick={this.handleClick.bind(this)}>Set storage</button>
     );
