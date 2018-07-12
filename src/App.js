@@ -86,12 +86,17 @@ class App extends Component {
     })
   }
 
+  // 'https://ipfs.io/ipfs/${this.state.ipfsHash}'
+
   render() {
     return (
       <div>
-        <h2>Ethos Crowdfunding</h2>
+        <h1>Ethos Crowdfunding</h1>
 
-        <h5>Submit a new Fund Proposal</h5>
+        <h3>Funds</h3>
+          <div></div>
+
+        <h4>Submit a new Fund Proposal</h4>
         <form onSubmit={this.onSubmit}>
           <input type="text" name="fundName" value={this.state.fundName} onChange={(e) => this.createFund(e)} />
           <input type="submit" />
