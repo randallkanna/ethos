@@ -13,11 +13,15 @@ class App extends Component {
     super(props)
 
     this.state = {
-      storageValue: 0,
       web3: null,
       contract: null,
-      account: null
+      account: null,
+      fundName: '',
+      ipfsHash: '',
     }
+
+    this.createFund = this.createFund.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
   }
 
   componentWillMount() {
@@ -45,41 +49,51 @@ class App extends Component {
     fund.setProvider(this.state.web3.currentProvider)
   }
 
-  createFund() {
-    // var fundInstance;
+  // var fundInstance;
 
-    // App.contracts.Fund.deployed().then(function(instance) {
-    //   fundInstance = instance;
-    //
-    //   return fundInstance.createFund.call();
-    // })
-    //     return fundInstance.getFunders.call();
-    //   }).then(function(funders) {
-    //     for (i = 0; i < funders.length; i++) {
-    //       if (funders[i] !== '0x0000000000000000000000000000000000000000') {
-    //         $('.panel').eq(i).find('button').text('Pending...').attr('disabled', true);
-    //       }
-    //     }
-    //   }).catch(function(err) {
-    //     console.log(err.message);
-    //   });
-    //   }
+  // App.contracts.Fund.deployed().then(function(instance) {
+  //   fundInstance = instance;
+  //
+  //   return fundInstance.createFund.call();
+  // })
+  //     return fundInstance.getFunders.call();
+  //   }).then(function(funders) {
+  //     for (i = 0; i < funders.length; i++) {
+  //       if (funders[i] !== '0x0000000000000000000000000000000000000000') {
+  //         $('.panel').eq(i).find('button').text('Pending...').attr('disabled', true);
+  //       }
+  //     }
+  //   }).catch(function(err) {
+  //     console.log(err.message);
+  //   });
+  //   }
+
+  createFund(event) {
+     this.setState({[event.target.name]: event.target.value})
   }
 
-  onChange() {
-    debugger;
-  }
+  onSubmit(event) {
+    event.preventDefault();
 
-  onSubmit() {
-
+    ipfs.files.add(Buffer.from(this.state.fundName), (err, result) => {
+      if (err) {
+        console.error(err);
+        return;
+      } else {
+        this.setState({ ipfsHash: result[0].hash })
+        console.log('ipfs', this.state.ipfsHash)
+      }
+    })
   }
 
   render() {
     return (
       <div>
-        <h3>Ethos Crowdfunding</h3>
+        <h2>Ethos Crowdfunding</h2>
+
+        <h5>Submit a new Fund Proposal</h5>
         <form onSubmit={this.onSubmit}>
-          <input type="text" onChange={this.submitForm} />
+          <input type="text" name="fundName" value={this.state.fundName} onChange={(e) => this.createFund(e)} />
           <input type="submit" />
         </form>
       </div>
