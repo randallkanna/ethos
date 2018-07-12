@@ -44,23 +44,6 @@ class App extends Component {
     const contract = require('truffle-contract')
     const fund = contract(FundContract)
     fund.setProvider(this.state.web3.currentProvider)
-
-    // var fundInstance
-
-    // Get accounts.
-    // this.state.web3.eth.getAccounts((error, accounts) => {
-    //   fund.deployed().then((instance) => {
-    //     fundInstance = instance
-      //   // Stores a given value, 5 by default.
-      //   return fundInstance.set(5, {from: accounts[0]})
-      // }).then((result) => {
-      //   // Get the value from the contract to prove it worked.
-      //   return fundInstance.get.call(accounts[0])
-      // }).then((result) => {
-      //   // Update state with the result.
-      //   return this.setState({ storageValue: result.c[0], contract: fundInstance, account: accounts[0] })
-      // })
-    // })
   }
 
   // handleClick() {
@@ -100,31 +83,16 @@ class App extends Component {
     //   }
   }
 
-  // handleSubmit(event) {
-  //   // debugger;
-  //
-  //   // const contract = this.state.contract
-  //   // const account = this.state.account
-  //
-  //   debugger;
-  //
-  //   // contract.set
-  //   event.preventDefault();
-  // }
-
   render() {
     return (
-        <div>
-          <h1>Ethos Crowdfunding</h1>
-            <div className="form-group">
-              <form onSubmit={this.createFund.bind(this)}>
-                <input type="text" name="Fund Name" className="form-control" placeholder="Enter Fund Name" />
-                <input type="submit" value="Submit" className="btn btn-dark" />
-              </form>
-            </div>
-        </div>
-//         <p>The stored value is: {this.state.storageValue}</p>
-//         <button onClick={this.handleClick.bind(this)}>Set storage</button>
+      <div>
+        <h1>Ethos Crowdfunding</h1>
+        <form action="">
+          <input type="text"/>
+        </form>
+
+        <FundList />
+      </div>
     );
   }
 }
