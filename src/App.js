@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import SimpleStorageContract from '../build/contracts/SimpleStorage.json'
+import FundContract from '../build/contracts/Fund.json'
 import getWeb3 from './utils/getWeb3'
 
 import './css/oswald.css'
@@ -18,20 +18,16 @@ class App extends Component {
       account: null
     }
 
-    this.handleSubmit = this.handleSubmit.bind(this);
+    // this.formSubmit = this.formSubmit.bind(this);
   }
 
   componentWillMount() {
-    // Get network provider and web3 instance.
-    // See utils/getWeb3 for more info.
-
     getWeb3
     .then(results => {
       this.setState({
         web3: results.web3
       })
 
-      // Instantiate contract once web3 provided.
       this.instantiateContract()
     })
     .catch(() => {
@@ -46,27 +42,25 @@ class App extends Component {
      */
 
     const contract = require('truffle-contract')
-    const simpleStorage = contract(SimpleStorageContract) // TODO: Fix this later
-    simpleStorage.setProvider(this.state.web3.currentProvider)  // TODO: Fix this later
+    const fund = contract(FundContract)
+    fund.setProvider(this.state.web3.currentProvider)
 
-    // Declaring this for later so we can chain functions on SimpleStorage.
-    var simpleStorageInstance
+    // var fundInstance
 
     // Get accounts.
-    this.state.web3.eth.getAccounts((error, accounts) => {
-      simpleStorage.deployed().then((instance) => {
-        simpleStorageInstance = instance
-
-        // Stores a given value, 5 by default.
-        return simpleStorageInstance.set(5, {from: accounts[0]})
-      }).then((result) => {
-        // Get the value from the contract to prove it worked.
-        return simpleStorageInstance.get.call(accounts[0])
-      }).then((result) => {
-        // Update state with the result.
-        return this.setState({ storageValue: result.c[0], contract: simpleStorageInstance, account: accounts[0] })
-      })
-    })
+    // this.state.web3.eth.getAccounts((error, accounts) => {
+    //   fund.deployed().then((instance) => {
+    //     fundInstance = instance
+      //   // Stores a given value, 5 by default.
+      //   return fundInstance.set(5, {from: accounts[0]})
+      // }).then((result) => {
+      //   // Get the value from the contract to prove it worked.
+      //   return fundInstance.get.call(accounts[0])
+      // }).then((result) => {
+      //   // Update state with the result.
+      //   return this.setState({ storageValue: result.c[0], contract: fundInstance, account: accounts[0] })
+      // })
+    // })
   }
 
   // handleClick() {
@@ -74,7 +68,6 @@ class App extends Component {
   //   const account = this.state.account
   //
   //   var value = 3
-  //
   //   contract.set(value, {from: account})
   //     .then(result => {
   //       return contract.get.call()
@@ -84,22 +77,47 @@ class App extends Component {
   //   })
   // }
 
-  handleSubmit(event) {
-    // debugger;
+  createFund() {
+    // var fundInstance;
 
-    const contract = this.state.contract
-    const account = this.state.account
-
-    // contract.set
-    event.preventDefault();
+    // App.contracts.Fund.deployed().then(function(instance) {
+    //   fundInstance = instance;
+    //
+    //   return fundInstance.createFund.call();
+    // })
+    //
+    //
+    //     return adoptionInstance.getAdopters.call();
+    //   }).then(function(adopters) {
+    //     for (i = 0; i < adopters.length; i++) {
+    //       if (adopters[i] !== '0x0000000000000000000000000000000000000000') {
+    //         $('.panel-pet').eq(i).find('button').text('Pending...').attr('disabled', true);
+    //       }
+    //     }
+    //   }).catch(function(err) {
+    //     console.log(err.message);
+    //   });
+    //   }
   }
+
+  // handleSubmit(event) {
+  //   // debugger;
+  //
+  //   // const contract = this.state.contract
+  //   // const account = this.state.account
+  //
+  //   debugger;
+  //
+  //   // contract.set
+  //   event.preventDefault();
+  // }
 
   render() {
     return (
         <div>
           <h1>Ethos Crowdfunding</h1>
             <div className="form-group">
-              <form onSubmit={this.handleSubmit.bind(this)}>
+              <form onSubmit={this.createFund.bind(this)}>
                 <input type="text" name="Fund Name" className="form-control" placeholder="Enter Fund Name" />
                 <input type="submit" value="Submit" className="btn btn-dark" />
               </form>
