@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import FundContract from '../build/contracts/Fund.json'
 import getWeb3 from './utils/getWeb3'
+import ipfs from './ipfs';
 
 import './css/oswald.css'
 import './css/open-sans.css'
@@ -17,8 +18,6 @@ class App extends Component {
       contract: null,
       account: null
     }
-
-    // this.formSubmit = this.formSubmit.bind(this);
   }
 
   componentWillMount() {
@@ -46,20 +45,6 @@ class App extends Component {
     fund.setProvider(this.state.web3.currentProvider)
   }
 
-  // handleClick() {
-  //   const contract = this.state.contract
-  //   const account = this.state.account
-  //
-  //   var value = 3
-  //   contract.set(value, {from: account})
-  //     .then(result => {
-  //       return contract.get.call()
-  //         .then(result => {
-  //           return this.setState({storageValue: result.contract[0]})
-  //         })
-  //   })
-  // }
-
   createFund() {
     // var fundInstance;
 
@@ -68,13 +53,11 @@ class App extends Component {
     //
     //   return fundInstance.createFund.call();
     // })
-    //
-    //
-    //     return adoptionInstance.getAdopters.call();
-    //   }).then(function(adopters) {
-    //     for (i = 0; i < adopters.length; i++) {
-    //       if (adopters[i] !== '0x0000000000000000000000000000000000000000') {
-    //         $('.panel-pet').eq(i).find('button').text('Pending...').attr('disabled', true);
+    //     return fundInstance.getFunders.call();
+    //   }).then(function(funders) {
+    //     for (i = 0; i < funders.length; i++) {
+    //       if (funders[i] !== '0x0000000000000000000000000000000000000000') {
+    //         $('.panel').eq(i).find('button').text('Pending...').attr('disabled', true);
     //       }
     //     }
     //   }).catch(function(err) {
@@ -83,15 +66,22 @@ class App extends Component {
     //   }
   }
 
+  onChange() {
+    debugger;
+  }
+
+  onSubmit() {
+
+  }
+
   render() {
     return (
       <div>
-        <h1>Ethos Crowdfunding</h1>
-        <form action="">
-          <input type="text"/>
+        <h3>Ethos Crowdfunding</h3>
+        <form onSubmit={this.onSubmit}>
+          <input type="text" onChange={this.submitForm} />
+          <input type="submit" />
         </form>
-
-        <FundList />
       </div>
     );
   }
