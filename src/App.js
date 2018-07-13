@@ -18,6 +18,7 @@ class App extends Component {
       account: null,
       fundName: '',
       ipfsHash: '',
+      funds: []
     }
 
     this.createFund = this.createFund.bind(this);
@@ -80,13 +81,33 @@ class App extends Component {
         console.error(err);
         return;
       } else {
-        this.setState({ ipfsHash: result[0].hash })
+        this.setState({ ipfsHash: result[0].hash });
+        this.updateFundsList();
         console.log('ipfs', this.state.ipfsHash)
       }
     })
   }
 
+
+  updateFundsList() {
+    // const ipfsHash = this.state.ipfsHash
+    const ipfsPath = `https://ipfs.io/ipfs/${this.state.ipfsHash}`
+    debugger;
+    ipfs.files.cat(ipfsPath, function(err, file) {
+      debugger;
+      if (err) {
+        throw err
+      }
+
+      console.log(file.toString('utf8'))
+    })
+  }
+
+  // <ul>
+    // {this.state.funds.map((fund) => <li>{fund}</li>)}
+  // </ul>
   // 'https://ipfs.io/ipfs/${this.state.ipfsHash}'
+
 
   render() {
     return (
