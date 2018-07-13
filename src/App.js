@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import FundContract from '../build/contracts/Fund.json'
 import getWeb3 from './utils/getWeb3'
+import ipfs from './ipfs';
 
 import './css/oswald.css'
 import './css/open-sans.css'
@@ -12,13 +13,16 @@ class App extends Component {
     super(props)
 
     this.state = {
-      storageValue: 0,
       web3: null,
       contract: null,
-      account: null
+      account: null,
+      fundName: '',
+      fundDescription: '',
+      ipfsHash: '',
     }
 
-    // this.formSubmit = this.formSubmit.bind(this);
+    this.createFund = this.createFund.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
   }
 
   componentWillMount() {
@@ -44,87 +48,65 @@ class App extends Component {
     const contract = require('truffle-contract')
     const fund = contract(FundContract)
     fund.setProvider(this.state.web3.currentProvider)
-
-    // var fundInstance
-
-    // Get accounts.
-    // this.state.web3.eth.getAccounts((error, accounts) => {
-    //   fund.deployed().then((instance) => {
-    //     fundInstance = instance
-      //   // Stores a given value, 5 by default.
-      //   return fundInstance.set(5, {from: accounts[0]})
-      // }).then((result) => {
-      //   // Get the value from the contract to prove it worked.
-      //   return fundInstance.get.call(accounts[0])
-      // }).then((result) => {
-      //   // Update state with the result.
-      //   return this.setState({ storageValue: result.c[0], contract: fundInstance, account: accounts[0] })
-      // })
-    // })
   }
 
-  // handleClick() {
-  //   const contract = this.state.contract
-  //   const account = this.state.account
+  createFund(event) {
+     this.setState({[event.target.name]: event.target.value})
+  }
+
+  onSubmit(event) {
+    event.preventDefault();
+
+    const hashData = JSON.stringify({
+      name: this.state.fundName,
+      fundDescription: this.state.fundDescription,
+    })
+
+    ipfs.add(Buffer.from(hashData), (err, result) => {
+      if (err) {
+        console.error(err);
+        return;
+      } else {
+        this.setState({ ipfsHash: result[0].hash });
+        console.log('ipfs: ', this.state.ipfsHash)
+      }
+    });
+
+    // console.log(JSON.parse(ipfs.cat(returnedHash)))
+  }
+
+  // showFunds() {
+
+  //   const hash = this.state.ipfsHash;
   //
-  //   var value = 3
-  //   contract.set(value, {from: account})
-  //     .then(result => {
-  //       return contract.get.call()
-  //         .then(result => {
-  //           return this.setState({storageValue: result.contract[0]})
-  //         })
+  //   const content = ipfs.files.get(hash, function (err, files) {
+  //     files.forEach((file) => {
+  //       debugger;
+  //       const test = file.content.toString('utf8');
+  //
+  //       return test;
+  //     })
   //   })
   // }
 
-  createFund() {
-    // var fundInstance;
-
-    // App.contracts.Fund.deployed().then(function(instance) {
-    //   fundInstance = instance;
-    //
-    //   return fundInstance.createFund.call();
-    // })
-    //
-    //
-    //     return adoptionInstance.getAdopters.call();
-    //   }).then(function(adopters) {
-    //     for (i = 0; i < adopters.length; i++) {
-    //       if (adopters[i] !== '0x0000000000000000000000000000000000000000') {
-    //         $('.panel-pet').eq(i).find('button').text('Pending...').attr('disabled', true);
-    //       }
-    //     }
-    //   }).catch(function(err) {
-    //     console.log(err.message);
-    //   });
-    //   }
-  }
-
-  // handleSubmit(event) {
-  //   // debugger;
-  //
-  //   // const contract = this.state.contract
-  //   // const account = this.state.account
-  //
-  //   debugger;
-  //
-  //   // contract.set
-  //   event.preventDefault();
-  // }
+    // {this.state.funds.map((fund) => <li>{fund}</li>)}
+  // 'https://ipfs.io/ipfs/${this.state.ipfsHash}'
 
   render() {
     return (
-        <div>
-          <h1>Ethos Crowdfunding</h1>
-            <div className="form-group">
-              <form onSubmit={this.createFund.bind(this)}>
-                <input type="text" name="Fund Name" className="form-control" placeholder="Enter Fund Name" />
-                <input type="submit" value="Submit" className="btn btn-dark" />
-              </form>
-            </div>
-        </div>
-//         <p>The stored value is: {this.state.storageValue}</p>
-//         <button onClick={this.handleClick.bind(this)}>Set storage</button>
+      <div>
+        <h1>Ethos Crowdfunding</h1>
+
+        <h3>Funds</h3>
+        {this.state.ipfsHash}
+
+        <h4>Submit a new Fund Proposal</h4>
+        <form onSubmit={this.onSubmit}>
+          Fund Name: <input type="text" name="fundName" value={this.state.fundName} onChange={(e) => this.createFund(e)} />
+          Fund Description: <input type="text" name="fundDescription" value={this.state.fundDescription} onChange={(e) => this.createFund(e)} />
+          <input type="submit" />
+        </form>
+      </div>
     );
   }
 }
