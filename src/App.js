@@ -81,33 +81,30 @@ class App extends Component {
         console.error(err);
         return;
       } else {
+        debugger;
         this.setState({ ipfsHash: result[0].hash });
-        this.updateFundsList();
-        console.log('ipfs', this.state.ipfsHash)
+        // this.showFunds();
+        console.log('ipfs: ', this.state.ipfsHash)
       }
     })
   }
 
-
-  updateFundsList() {
-    // const ipfsHash = this.state.ipfsHash
-    const ipfsPath = `https://ipfs.io/ipfs/${this.state.ipfsHash}`
-    debugger;
-    ipfs.files.cat(ipfsPath, function(err, file) {
-      debugger;
-      if (err) {
-        throw err
-      }
-
-      console.log(file.toString('utf8'))
-    })
-  }
+  // showFunds() {
+  //   const hash = this.state.ipfsHash;
+  //
+  //   const content = ipfs.files.get(hash, function (err, files) {
+  //     files.forEach((file) => {
+  //       const test = file.content.toString('utf8');
+  //
+  //       return test;
+  //     })
+  //   })
+  // }
 
   // <ul>
     // {this.state.funds.map((fund) => <li>{fund}</li>)}
   // </ul>
   // 'https://ipfs.io/ipfs/${this.state.ipfsHash}'
-
 
   render() {
     return (
@@ -115,7 +112,6 @@ class App extends Component {
         <h1>Ethos Crowdfunding</h1>
 
         <h3>Funds</h3>
-          <div></div>
 
         <h4>Submit a new Fund Proposal</h4>
         <form onSubmit={this.onSubmit}>
