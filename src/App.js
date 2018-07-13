@@ -17,8 +17,8 @@ class App extends Component {
       contract: null,
       account: null,
       fundName: '',
+      fundDescription: '',
       ipfsHash: '',
-      funds: []
     }
 
     this.createFund = this.createFund.bind(this);
@@ -50,25 +50,6 @@ class App extends Component {
     fund.setProvider(this.state.web3.currentProvider)
   }
 
-  // var fundInstance;
-
-  // App.contracts.Fund.deployed().then(function(instance) {
-  //   fundInstance = instance;
-  //
-  //   return fundInstance.createFund.call();
-  // })
-  //     return fundInstance.getFunders.call();
-  //   }).then(function(funders) {
-  //     for (i = 0; i < funders.length; i++) {
-  //       if (funders[i] !== '0x0000000000000000000000000000000000000000') {
-  //         $('.panel').eq(i).find('button').text('Pending...').attr('disabled', true);
-  //       }
-  //     }
-  //   }).catch(function(err) {
-  //     console.log(err.message);
-  //   });
-  //   }
-
   createFund(event) {
      this.setState({[event.target.name]: event.target.value})
   }
@@ -76,24 +57,31 @@ class App extends Component {
   onSubmit(event) {
     event.preventDefault();
 
-    ipfs.files.add(Buffer.from(this.state.fundName), (err, result) => {
+    const hashData = JSON.stringify({
+      name: this.state.fundName,
+      fundDescription: this.state.fundDescription,
+    })
+
+    ipfs.add(Buffer.from(hashData), (err, result) => {
       if (err) {
         console.error(err);
         return;
       } else {
-        debugger;
         this.setState({ ipfsHash: result[0].hash });
-        // this.showFunds();
         console.log('ipfs: ', this.state.ipfsHash)
       }
-    })
+    });
+
+    // console.log(JSON.parse(ipfs.cat(returnedHash)))
   }
 
   // showFunds() {
+
   //   const hash = this.state.ipfsHash;
   //
   //   const content = ipfs.files.get(hash, function (err, files) {
   //     files.forEach((file) => {
+  //       debugger;
   //       const test = file.content.toString('utf8');
   //
   //       return test;
@@ -101,9 +89,7 @@ class App extends Component {
   //   })
   // }
 
-  // <ul>
     // {this.state.funds.map((fund) => <li>{fund}</li>)}
-  // </ul>
   // 'https://ipfs.io/ipfs/${this.state.ipfsHash}'
 
   render() {
@@ -112,10 +98,12 @@ class App extends Component {
         <h1>Ethos Crowdfunding</h1>
 
         <h3>Funds</h3>
+        {this.state.ipfsHash}
 
         <h4>Submit a new Fund Proposal</h4>
         <form onSubmit={this.onSubmit}>
-          <input type="text" name="fundName" value={this.state.fundName} onChange={(e) => this.createFund(e)} />
+          Fund Name: <input type="text" name="fundName" value={this.state.fundName} onChange={(e) => this.createFund(e)} />
+          Fund Description: <input type="text" name="fundDescription" value={this.state.fundDescription} onChange={(e) => this.createFund(e)} />
           <input type="submit" />
         </form>
       </div>
