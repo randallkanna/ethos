@@ -49,24 +49,16 @@ class App extends Component {
     const simpleStorage = contract(SimpleStorageContract)
     simpleStorage.setProvider(this.state.web3.currentProvider)
 
-    // var simpleStorageInstance
-
     this.state.web3.eth.getAccounts((error, accounts) => {
       simpleStorage.deployed().then((instance) => {
         this.simpleStorageInstance = instance
         this.setState({ account: accounts[0] });
-
-        return this.simpleStorageInstance.set(5, {from: accounts[0]})
       }).then((result) => {
         return this.simpleStorageInstance.get.call(accounts[0])
-        // return this.simpleStorageInstance.set({from: accounts[0]})
-        // return simpleStorageInstance.get({from: accounts[0]});
-        // return this.simpleStorageInstance.get.call(accounts[0]);
-      }).then((ipfsHash) => {
-        debugger;
-        console.log(ipfsHash);
-        // return this.setState({ ipfsHash });
       })
+      // .then((ipfsHash) => {
+      //   return this.setState({ ipfsHash });
+      // })
     })
   }
 
