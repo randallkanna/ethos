@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import FundContract from '../build/contracts/Fund.json'
-import SimpleStorageContract from '../build/contracts/SimpleStorage.json'
+// import SimpleStorageContract from '../build/contracts/SimpleStorage.json'
 import getWeb3 from './utils/getWeb3'
 import ipfs from './ipfs';
 
@@ -20,6 +20,8 @@ class App extends Component {
       fundName: '',
       fundDescription: '',
       ipfsHash: '',
+      fundCount: '',
+      funds: [],
     }
 
     this.createFund = this.createFund.bind(this);
@@ -33,7 +35,7 @@ class App extends Component {
         web3: results.web3
       })
 
-      this.instantiateContract()
+      this.instantiateContract();
     })
     .catch(() => {
       console.log('Error finding web3.')
@@ -46,15 +48,15 @@ class App extends Component {
      * state management library, but for convenience I've placed them here.
      */
     const contract = require('truffle-contract')
-    const simpleStorage = contract(SimpleStorageContract)
-    simpleStorage.setProvider(this.state.web3.currentProvider)
+    const fund = contract(FundContract)
+    fund.setProvider(this.state.web3.currentProvider)
 
     this.state.web3.eth.getAccounts((error, accounts) => {
-      simpleStorage.deployed().then((instance) => {
-        this.simpleStorageInstance = instance
+      fund.deployed().then((instance) => {
+        this.fundInstance = instance
         this.setState({ account: accounts[0] });
       }).then((result) => {
-        return this.simpleStorageInstance.get.call(accounts[0])
+        return this.fundInstance.get.call(accounts[0])
       })
       // .then((ipfsHash) => {
       //   return this.setState({ ipfsHash });
@@ -66,8 +68,17 @@ class App extends Component {
      this.setState({[event.target.name]: event.target.value})
   }
 
-  getFunders() {
+  showFundsCount() {
+    // saving gas costs by storying the ipfs hashes in JS
+    const ipfsList = this.state.funds;
 
+    return this.setState({fundCount: ipfsList.length})
+  }
+
+  showFunds() {
+    // const funders = this.fundInstance.getAllFunds({from: this.state.account}).then((results) => {
+    //   debugger;
+    // })
   }
 
   onSubmit(event) {
@@ -84,7 +95,14 @@ class App extends Component {
         return;
       }
 
-      this.simpleStorageInstance.set(result[0].hash, {from: this.state.account})
+      // this.fundInstance.set(result[0].hash, {from: this.state.account})
+      this.fundInstance.createFund(result[0].hash, {from: this.state.account})
+      // this.showFunds();
+      this.setState({ funds: [...this.state.funds, result[0].hash] })
+      this.showFundsCount();
+
+      // debugger;
+
       return this.setState({ipfsHash: result[0].hash});
     });
 
@@ -111,6 +129,8 @@ class App extends Component {
     return (
       <div>
         <h1>Ethos Crowdfunding</h1>
+
+        <h3>{this.state.fundCount || 0} funds to contribute to currently.</h3>
 
         <h3>Funds</h3>
         {this.state.ipfsHash}

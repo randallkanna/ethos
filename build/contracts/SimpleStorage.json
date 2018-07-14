@@ -40,14 +40,14 @@
     "absolutePath": "/Users/randallkanna/Documents/code/eth/ethos/contracts/SimpleStorage.sol",
     "exportedSymbols": {
       "SimpleStorage": [
-        128
+        148
       ]
     },
-    "id": 129,
+    "id": 149,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 107,
+        "id": 127,
         "literals": [
           "solidity",
           "^",
@@ -63,19 +63,19 @@
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
-        "id": 128,
+        "id": 148,
         "linearizedBaseContracts": [
-          128
+          148
         ],
         "name": "SimpleStorage",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "constant": false,
-            "id": 109,
+            "id": 129,
             "name": "ipfsHash",
             "nodeType": "VariableDeclaration",
-            "scope": 128,
+            "scope": 148,
             "src": "53:15:1",
             "stateVariable": true,
             "storageLocation": "default",
@@ -84,7 +84,7 @@
               "typeString": "string"
             },
             "typeName": {
-              "id": 108,
+              "id": 128,
               "name": "string",
               "nodeType": "ElementaryTypeName",
               "src": "53:6:1",
@@ -98,25 +98,25 @@
           },
           {
             "body": {
-              "id": 118,
+              "id": 138,
               "nodeType": "Block",
               "src": "103:23:1",
               "statements": [
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 116,
+                    "id": 136,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "argumentTypes": null,
-                      "id": 114,
+                      "id": 134,
                       "name": "ipfsHash",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 109,
+                      "referencedDeclaration": 129,
                       "src": "109:8:1",
                       "typeDescriptions": {
                         "typeIdentifier": "t_string_storage",
@@ -127,11 +127,11 @@
                     "operator": "=",
                     "rightHandSide": {
                       "argumentTypes": null,
-                      "id": 115,
+                      "id": 135,
                       "name": "x",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 111,
+                      "referencedDeclaration": 131,
                       "src": "120:1:1",
                       "typeDescriptions": {
                         "typeIdentifier": "t_string_memory_ptr",
@@ -144,14 +144,14 @@
                       "typeString": "string storage ref"
                     }
                   },
-                  "id": 117,
+                  "id": 137,
                   "nodeType": "ExpressionStatement",
                   "src": "109:12:1"
                 }
               ]
             },
             "documentation": null,
-            "id": 119,
+            "id": 139,
             "implemented": true,
             "isConstructor": false,
             "isDeclaredConst": false,
@@ -159,15 +159,15 @@
             "name": "set",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 112,
+              "id": 132,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 111,
+                  "id": 131,
                   "name": "x",
                   "nodeType": "VariableDeclaration",
-                  "scope": 119,
+                  "scope": 139,
                   "src": "86:8:1",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -176,7 +176,7 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 110,
+                    "id": 130,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
                     "src": "86:6:1",
@@ -193,12 +193,12 @@
             },
             "payable": false,
             "returnParameters": {
-              "id": 113,
+              "id": 133,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "103:0:1"
             },
-            "scope": 128,
+            "scope": 148,
             "src": "73:53:1",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -206,33 +206,33 @@
           },
           {
             "body": {
-              "id": 126,
+              "id": 146,
               "nodeType": "Block",
               "src": "174:26:1",
               "statements": [
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 124,
+                    "id": 144,
                     "name": "ipfsHash",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
-                    "referencedDeclaration": 109,
+                    "referencedDeclaration": 129,
                     "src": "187:8:1",
                     "typeDescriptions": {
                       "typeIdentifier": "t_string_storage",
                       "typeString": "string storage ref"
                     }
                   },
-                  "functionReturnParameters": 123,
-                  "id": 125,
+                  "functionReturnParameters": 143,
+                  "id": 145,
                   "nodeType": "Return",
                   "src": "180:15:1"
                 }
               ]
             },
             "documentation": null,
-            "id": 127,
+            "id": 147,
             "implemented": true,
             "isConstructor": false,
             "isDeclaredConst": true,
@@ -240,22 +240,22 @@
             "name": "get",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 120,
+              "id": 140,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "142:2:1"
             },
             "payable": false,
             "returnParameters": {
-              "id": 123,
+              "id": 143,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 122,
+                  "id": 142,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 127,
+                  "scope": 147,
                   "src": "166:6:1",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -264,7 +264,7 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 121,
+                    "id": 141,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
                     "src": "166:6:1",
@@ -279,14 +279,14 @@
               ],
               "src": "165:8:1"
             },
-            "scope": 128,
+            "scope": 148,
             "src": "130:70:1",
             "stateMutability": "view",
             "superFunction": null,
             "visibility": "public"
           }
         ],
-        "scope": 129,
+        "scope": 149,
         "src": "26:176:1"
       }
     ],
@@ -296,14 +296,14 @@
     "absolutePath": "/Users/randallkanna/Documents/code/eth/ethos/contracts/SimpleStorage.sol",
     "exportedSymbols": {
       "SimpleStorage": [
-        128
+        148
       ]
     },
-    "id": 129,
+    "id": 149,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 107,
+        "id": 127,
         "literals": [
           "solidity",
           "^",
@@ -319,19 +319,19 @@
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
-        "id": 128,
+        "id": 148,
         "linearizedBaseContracts": [
-          128
+          148
         ],
         "name": "SimpleStorage",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "constant": false,
-            "id": 109,
+            "id": 129,
             "name": "ipfsHash",
             "nodeType": "VariableDeclaration",
-            "scope": 128,
+            "scope": 148,
             "src": "53:15:1",
             "stateVariable": true,
             "storageLocation": "default",
@@ -340,7 +340,7 @@
               "typeString": "string"
             },
             "typeName": {
-              "id": 108,
+              "id": 128,
               "name": "string",
               "nodeType": "ElementaryTypeName",
               "src": "53:6:1",
@@ -354,25 +354,25 @@
           },
           {
             "body": {
-              "id": 118,
+              "id": 138,
               "nodeType": "Block",
               "src": "103:23:1",
               "statements": [
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 116,
+                    "id": 136,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "argumentTypes": null,
-                      "id": 114,
+                      "id": 134,
                       "name": "ipfsHash",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 109,
+                      "referencedDeclaration": 129,
                       "src": "109:8:1",
                       "typeDescriptions": {
                         "typeIdentifier": "t_string_storage",
@@ -383,11 +383,11 @@
                     "operator": "=",
                     "rightHandSide": {
                       "argumentTypes": null,
-                      "id": 115,
+                      "id": 135,
                       "name": "x",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 111,
+                      "referencedDeclaration": 131,
                       "src": "120:1:1",
                       "typeDescriptions": {
                         "typeIdentifier": "t_string_memory_ptr",
@@ -400,14 +400,14 @@
                       "typeString": "string storage ref"
                     }
                   },
-                  "id": 117,
+                  "id": 137,
                   "nodeType": "ExpressionStatement",
                   "src": "109:12:1"
                 }
               ]
             },
             "documentation": null,
-            "id": 119,
+            "id": 139,
             "implemented": true,
             "isConstructor": false,
             "isDeclaredConst": false,
@@ -415,15 +415,15 @@
             "name": "set",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 112,
+              "id": 132,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 111,
+                  "id": 131,
                   "name": "x",
                   "nodeType": "VariableDeclaration",
-                  "scope": 119,
+                  "scope": 139,
                   "src": "86:8:1",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -432,7 +432,7 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 110,
+                    "id": 130,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
                     "src": "86:6:1",
@@ -449,12 +449,12 @@
             },
             "payable": false,
             "returnParameters": {
-              "id": 113,
+              "id": 133,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "103:0:1"
             },
-            "scope": 128,
+            "scope": 148,
             "src": "73:53:1",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -462,33 +462,33 @@
           },
           {
             "body": {
-              "id": 126,
+              "id": 146,
               "nodeType": "Block",
               "src": "174:26:1",
               "statements": [
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 124,
+                    "id": 144,
                     "name": "ipfsHash",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
-                    "referencedDeclaration": 109,
+                    "referencedDeclaration": 129,
                     "src": "187:8:1",
                     "typeDescriptions": {
                       "typeIdentifier": "t_string_storage",
                       "typeString": "string storage ref"
                     }
                   },
-                  "functionReturnParameters": 123,
-                  "id": 125,
+                  "functionReturnParameters": 143,
+                  "id": 145,
                   "nodeType": "Return",
                   "src": "180:15:1"
                 }
               ]
             },
             "documentation": null,
-            "id": 127,
+            "id": 147,
             "implemented": true,
             "isConstructor": false,
             "isDeclaredConst": true,
@@ -496,22 +496,22 @@
             "name": "get",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 120,
+              "id": 140,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "142:2:1"
             },
             "payable": false,
             "returnParameters": {
-              "id": 123,
+              "id": 143,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 122,
+                  "id": 142,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 127,
+                  "scope": 147,
                   "src": "166:6:1",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -520,7 +520,7 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 121,
+                    "id": 141,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
                     "src": "166:6:1",
@@ -535,14 +535,14 @@
               ],
               "src": "165:8:1"
             },
-            "scope": 128,
+            "scope": 148,
             "src": "130:70:1",
             "stateMutability": "view",
             "superFunction": null,
             "visibility": "public"
           }
         ],
-        "scope": 129,
+        "scope": 149,
         "src": "26:176:1"
       }
     ],
@@ -556,10 +556,10 @@
     "4447": {
       "events": {},
       "links": {},
-      "address": "0xf25186b5081ff5ce73482ad761db0eb0d25abfbf",
-      "transactionHash": "0xf3ed1a10693bf9b076e5030626ed5b9da04cd96d38f8bbcf8a068e9fe7bb95bc"
+      "address": "0xbaaa2a3237035a2c7fa2a33c76b44a8c6fe18e87",
+      "transactionHash": "0x5726696530834601e171e620bb0473cef980da756eb14d3cd74d4405688a8d1e"
     }
   },
   "schemaVersion": "2.0.0",
-  "updatedAt": "2018-07-14T01:31:06.118Z"
+  "updatedAt": "2018-07-14T01:58:06.321Z"
 }
