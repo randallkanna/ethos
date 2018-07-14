@@ -69,19 +69,26 @@ class App extends Component {
 
   showAllFunds() {
     const ipfsHashList = this.state.funds;
+    const ipfsFundData = [];
 
     ipfsHashList.map(function(ipfsHash) {
-      debugger;
+      ipfs.files.cat(ipfsHash, function (err, files) {
+        debugger;
+        const fund = JSON.parse(files);
+
+        // 
+      })
     })
-    // const content = ipfs.files.get(ipfsHashList, function (err, files) {
-    //   files.forEach((file) => {
-    //     debugger;
-    //     const test = file.content.toString('utf8');
-    //     debugger
-    //     return test;
-    //   })
-    // })
   }
+
+  // ipfsHashList.map(function(ipfsHash) {
+  //   ipfs.files.get(ipfsHash, function (err, files) {
+  //     files.forEach((file) => {
+  //       const test = file.content.toString('utf8');
+  //       debugger
+  //       return test;
+  //     })
+  //   })
 
   showFundsCount() {
     // saving gas costs by storying the ipfs hashes in JS for now
