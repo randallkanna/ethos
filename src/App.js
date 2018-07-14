@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import FundContract from '../build/contracts/Fund.json'
+import SimpleStorageContract from '../build/contracts/SimpleStorage.json'
 import getWeb3 from './utils/getWeb3'
 import ipfs from './ipfs';
 
@@ -44,14 +45,29 @@ class App extends Component {
      * Normally these functions would be called in the context of a
      * state management library, but for convenience I've placed them here.
      */
-
     const contract = require('truffle-contract')
-    const fund = contract(FundContract)
-    fund.setProvider(this.state.web3.currentProvider)
+    const simpleStorage = contract(SimpleStorageContract)
+    simpleStorage.setProvider(this.state.web3.currentProvider)
+
+    this.state.web3.eth.getAccounts((error, accounts) => {
+      simpleStorage.deployed().then((instance) => {
+        this.simpleStorageInstance = instance
+        this.setState({ account: accounts[0] });
+      }).then((result) => {
+        return this.simpleStorageInstance.get.call(accounts[0])
+      })
+      // .then((ipfsHash) => {
+      //   return this.setState({ ipfsHash });
+      // })
+    })
   }
 
   createFund(event) {
      this.setState({[event.target.name]: event.target.value})
+  }
+
+  getFunders() {
+
   }
 
   onSubmit(event) {
@@ -66,10 +82,10 @@ class App extends Component {
       if (err) {
         console.error(err);
         return;
-      } else {
-        this.setState({ ipfsHash: result[0].hash });
-        console.log('ipfs: ', this.state.ipfsHash)
       }
+
+      this.simpleStorageInstance.set(result[0].hash, {from: this.state.account})
+      return this.setState({ipfsHash: result[0].hash});
     });
 
     // console.log(JSON.parse(ipfs.cat(returnedHash)))
@@ -89,7 +105,6 @@ class App extends Component {
   //   })
   // }
 
-    // {this.state.funds.map((fund) => <li>{fund}</li>)}
   // 'https://ipfs.io/ipfs/${this.state.ipfsHash}'
 
   render() {
