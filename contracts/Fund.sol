@@ -1,14 +1,14 @@
-pragma solidity ^0.4.18;
+pragma solidity ^0.4.24;
 
 contract Fund {
   address public owner;
   uint fundID;
   string ipfsHash;
 
-  mapping(uint => Fund) public funds;
+  mapping(address => FundStorage) public funds;
   mapping (address => uint) private balances;
 
-	event Deposit(address sender, uint amount);
+	/* event Deposit(address sender, uint amount); */
   // TODO - Add withdraw event
 
   /* event DonatedToFund(
@@ -21,11 +21,9 @@ contract Fund {
     fundID = 1;
   }
 
-  struct Fund {
+  struct FundStorage {
     address fundCreator;
-    uint id;
-    string fundTitle;
-    string description;
+    string ipfsHash;
   }
 
   function set(string x) public {
@@ -36,23 +34,20 @@ contract Fund {
     return ipfsHash;
   }
 
-  function createFund(ipfsHash) public {
-    // push into the storage of hashes
-
-    /* funds[fundID] = Fund({fundTitle: _title, description: _description, id: fundID, fundCreator: msg.sender}); */
+  function createFund(string ipfs) public {
+    funds[msg.sender] = FundStorage({ipfsHash: ipfs, fundCreator: msg.sender});
   }
 
-  function getAllFunds() public return (string) {
-    // TODO return an object here?
+  function getAllFunds() public view returns (string) {
+    // TODO: return all hashes here
 
-    // return all hashes here
   }
 
   function donateToFund() public payable {
+    // TO DO - Refactor
     // find what fund they want to donate to here
     // uint fundID
     /* var fund = funds[fundID]; */
-    Deposit(msg.sender, msg.value);
   }
 
   function withdrawFunds(uint withdrawAmount) public payable {

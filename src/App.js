@@ -20,6 +20,8 @@ class App extends Component {
       fundName: '',
       fundDescription: '',
       ipfsHash: '',
+      fundCount: '',
+      funds: [],
     }
 
     this.createFund = this.createFund.bind(this);
@@ -33,7 +35,7 @@ class App extends Component {
         web3: results.web3
       })
 
-      this.instantiateContract()
+      this.instantiateContract();
     })
     .catch(() => {
       console.log('Error finding web3.')
@@ -66,8 +68,17 @@ class App extends Component {
      this.setState({[event.target.name]: event.target.value})
   }
 
-  getFunders() {
+  showFundsCount() {
+    // saving gas costs by storying the ipfs hashes in JS
+    const ipfsList = this.state.funds;
 
+    return this.setState({fundCount: ipfsList.length})
+  }
+
+  showFunds() {
+    // const funders = this.fundInstance.getAllFunds({from: this.state.account}).then((results) => {
+    //   debugger;
+    // })
   }
 
   onSubmit(event) {
@@ -86,6 +97,12 @@ class App extends Component {
 
       // this.fundInstance.set(result[0].hash, {from: this.state.account})
       this.fundInstance.createFund(result[0].hash, {from: this.state.account})
+      // this.showFunds();
+      this.setState({ funds: [...this.state.funds, result[0].hash] })
+      this.showFundsCount();
+
+      // debugger;
+
       return this.setState({ipfsHash: result[0].hash});
     });
 
@@ -112,6 +129,8 @@ class App extends Component {
     return (
       <div>
         <h1>Ethos Crowdfunding</h1>
+
+        <h3>{this.state.fundCount || 0} funds to contribute to currently.</h3>
 
         <h3>Funds</h3>
         {this.state.ipfsHash}
