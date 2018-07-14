@@ -3,6 +3,7 @@ pragma solidity ^0.4.18;
 contract Fund {
   address public owner;
   uint fundID;
+  string ipfsHash;
 
   mapping(uint => Fund) public funds;
   mapping (address => uint) private balances;
@@ -27,9 +28,24 @@ contract Fund {
     string description;
   }
 
-  function createFund(string _title, string _description) public {
-    // set requires    // require a fund cannot be changed or modified unless by owner
-    funds[fundID] = Fund({fundTitle: _title, description: _description, id: fundID, fundCreator: msg.sender});
+  function set(string x) public {
+    ipfsHash = x;
+  }
+
+  function get() public view returns (string) {
+    return ipfsHash;
+  }
+
+  function createFund(ipfsHash) public {
+    // push into the storage of hashes
+
+    /* funds[fundID] = Fund({fundTitle: _title, description: _description, id: fundID, fundCreator: msg.sender}); */
+  }
+
+  function getAllFunds() public return (string) {
+    // TODO return an object here?
+
+    // return all hashes here
   }
 
   function donateToFund() public payable {
