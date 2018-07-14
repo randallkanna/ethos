@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import FundContract from '../build/contracts/Fund.json'
-// import SimpleStorageContract from '../build/contracts/SimpleStorage.json'
 import getWeb3 from './utils/getWeb3'
 import ipfs from './ipfs';
 
@@ -39,6 +38,9 @@ class App extends Component {
     })
     .catch(() => {
       console.log('Error finding web3.')
+    }).then(() => {
+      this.showFundsCount();
+      this.showAllFunds();
     })
   }
 
@@ -58,9 +60,6 @@ class App extends Component {
       }).then((result) => {
         return this.fundInstance.get.call(accounts[0])
       })
-      // .then((ipfsHash) => {
-      //   return this.setState({ ipfsHash });
-      // })
     })
   }
 
@@ -68,17 +67,27 @@ class App extends Component {
      this.setState({[event.target.name]: event.target.value})
   }
 
+  showAllFunds() {
+    const ipfsHashList = this.state.funds;
+
+    ipfsHashList.map(function(ipfsHash) {
+      debugger;
+    })
+    // const content = ipfs.files.get(ipfsHashList, function (err, files) {
+    //   files.forEach((file) => {
+    //     debugger;
+    //     const test = file.content.toString('utf8');
+    //     debugger
+    //     return test;
+    //   })
+    // })
+  }
+
   showFundsCount() {
-    // saving gas costs by storying the ipfs hashes in JS
+    // saving gas costs by storying the ipfs hashes in JS for now
     const ipfsList = this.state.funds;
 
     return this.setState({fundCount: ipfsList.length})
-  }
-
-  showFunds() {
-    // const funders = this.fundInstance.getAllFunds({from: this.state.account}).then((results) => {
-    //   debugger;
-    // })
   }
 
   onSubmit(event) {
@@ -95,39 +104,21 @@ class App extends Component {
         return;
       }
 
-      // this.fundInstance.set(result[0].hash, {from: this.state.account})
       this.fundInstance.createFund(result[0].hash, {from: this.state.account})
-      // this.showFunds();
       this.setState({ funds: [...this.state.funds, result[0].hash] })
+      this.showAllFunds();
       this.showFundsCount();
-
-      // debugger;
-
       return this.setState({ipfsHash: result[0].hash});
     });
 
     // console.log(JSON.parse(ipfs.cat(returnedHash)))
   }
 
-  // showFunds() {
-
-  //   const hash = this.state.ipfsHash;
-  //
-  //   const content = ipfs.files.get(hash, function (err, files) {
-  //     files.forEach((file) => {
-  //       debugger;
-  //       const test = file.content.toString('utf8');
-  //
-  //       return test;
-  //     })
-  //   })
-  // }
-
   // 'https://ipfs.io/ipfs/${this.state.ipfsHash}'
 
   render() {
     return (
-      <div>
+      <div className="wrapper">
         <h1>Ethos Crowdfunding</h1>
 
         <h3>{this.state.fundCount || 0} funds to contribute to currently.</h3>
