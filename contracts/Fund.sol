@@ -43,11 +43,12 @@ contract Fund {
 
   }
 
-  function donateToFund() public payable {
+  function donateToFund(address addr, uint eth) public payable {
     // TO DO - Refactor
     // find what fund they want to donate to here
     // uint fundID
     /* var fund = funds[fundID]; */
+    addr.transfer(eth);
   }
 
   function withdrawFunds(uint withdrawAmount) public payable {
