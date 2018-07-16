@@ -38,11 +38,6 @@ contract Fund {
     funds[msg.sender] = FundStorage({ipfsHash: ipfs, fundCreator: msg.sender});
   }
 
-  function getAllFunds() public view returns (string) {
-    // TODO: return all hashes here
-
-  }
-
   function donateToFund(address addr, uint eth) public payable {
     // TO DO - Refactor
     // find what fund they want to donate to here
