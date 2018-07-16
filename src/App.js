@@ -73,31 +73,26 @@ class App extends Component {
     const ipfsFundData = [];
 
     if (ipfsHashList.length > 0) {
-      const requests = ipfsHashList.map(function(ipfsHash) {
-        ipfs.files.cat(ipfsHash, function (err, files) {
-          if (err) {
-            console.error(err);
-            return;
-          }
+      var results = new Promise((resolve, reject) => {
+        const requests = ipfsHashList.map(function(ipfsHash) {
+          ipfs.files.cat(ipfsHash, function (err, files) {
+            if (err) {
+              console.error(err);
+              return;
+            }
 
-          const fund = JSON.parse(files);
+            const fund = JSON.parse(files);
 
-          debugger;
+            ipfsFundData.push(fund)
 
-          ipfsFundData.push(fund)
+            resolve();
+          })
         })
-      })
+      });
 
-      Promise.all(requests).then(function(results){
-   // do something after the loop finishes
-       debugger;
-         this.setState({ completeFundList: ipfsFundData });
-
-      })
-
-      // Promise.all(requests).then((function(results)) {
-      //   debugger;
-      // });
+      results.then(() => {
+        this.setState({ completeFundList: ipfsFundData });
+      });
     }
   }
 
@@ -111,7 +106,7 @@ class App extends Component {
 
     const hashData = JSON.stringify({
       name: this.state.fundName,
-      fundDescription: this.state.fundDescription,
+      description: this.state.fundDescription,
       address: this.state.account,
     })
 
@@ -127,11 +122,7 @@ class App extends Component {
       this.showFundsCount();
       return this.setState({ipfsHash: result[0].hash});
     });
-
-    // console.log(JSON.parse(ipfs.cat(returnedHash)))
   }
-
-  // 'https://ipfs.io/ipfs/${this.state.ipfsHash}'
 
   render() {
       const fundItems = this.state.completeFundList.map((fund, index) =>
