@@ -102,6 +102,7 @@ class App extends Component {
   }
 
   sendFunds(address, funds) {
+    // TO DO: Fix error here for nonce
     this.fundInstance.donateToFund(address, funds, {from: this.state.account});
   }
 
