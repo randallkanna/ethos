@@ -21,6 +21,7 @@ class App extends Component {
       ipfsHash: '',
       fundCount: '',
       funds: [],
+      completeFundList: [],
     }
 
     this.createFund = this.createFund.bind(this);
@@ -71,30 +72,38 @@ class App extends Component {
     const ipfsHashList = this.state.funds;
     const ipfsFundData = [];
 
-    ipfsHashList.map(function(ipfsHash) {
-      ipfs.files.cat(ipfsHash, function (err, files) {
-        debugger;
-        const fund = JSON.parse(files);
+    if (ipfsHashList.length > 0) {
+      const requests = ipfsHashList.map(function(ipfsHash) {
+        ipfs.files.cat(ipfsHash, function (err, files) {
+          if (err) {
+            console.error(err);
+            return;
+          }
 
-        // 
+          const fund = JSON.parse(files);
+
+          debugger;
+
+          ipfsFundData.push(fund)
+        })
       })
-    })
-  }
 
-  // ipfsHashList.map(function(ipfsHash) {
-  //   ipfs.files.get(ipfsHash, function (err, files) {
-  //     files.forEach((file) => {
-  //       const test = file.content.toString('utf8');
-  //       debugger
-  //       return test;
-  //     })
-  //   })
+      Promise.all(requests).then(function(results){
+   // do something after the loop finishes
+       debugger;
+         this.setState({ completeFundList: ipfsFundData });
+
+      })
+
+      // Promise.all(requests).then((function(results)) {
+      //   debugger;
+      // });
+    }
+  }
 
   showFundsCount() {
     // saving gas costs by storying the ipfs hashes in JS for now
-    const ipfsList = this.state.funds;
-
-    return this.setState({fundCount: ipfsList.length})
+    return this.setState({fundCount: this.state.funds.length})
   }
 
   onSubmit(event) {
@@ -103,6 +112,7 @@ class App extends Component {
     const hashData = JSON.stringify({
       name: this.state.fundName,
       fundDescription: this.state.fundDescription,
+      address: this.state.account,
     })
 
     ipfs.add(Buffer.from(hashData), (err, result) => {
@@ -124,6 +134,10 @@ class App extends Component {
   // 'https://ipfs.io/ipfs/${this.state.ipfsHash}'
 
   render() {
+      const fundItems = this.state.completeFundList.map((fund, index) =>
+        <li key={index}>{fund.address}{fund.name}{fund.description}</li>
+      );
+
     return (
       <div className="wrapper">
         <h1>Ethos Crowdfunding</h1>
@@ -131,7 +145,9 @@ class App extends Component {
         <h3>{this.state.fundCount || 0} funds to contribute to currently.</h3>
 
         <h3>Funds</h3>
-        {this.state.ipfsHash}
+          <ul>
+          {fundItems}
+         </ul>
 
         <h4>Submit a new Fund Proposal</h4>
         <form onSubmit={this.onSubmit}>
