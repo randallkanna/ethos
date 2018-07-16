@@ -101,6 +101,11 @@ class App extends Component {
     return this.setState({fundCount: this.state.funds.length})
   }
 
+  sendFunds(address, funds) {
+    // TO DO: Fix error here for nonce
+    this.fundInstance.donateToFund(address, funds, {from: this.state.account});
+  }
+
   onSubmit(event) {
     event.preventDefault();
 
@@ -126,7 +131,10 @@ class App extends Component {
 
   render() {
       const fundItems = this.state.completeFundList.map((fund, index) =>
-        <li key={index}>{fund.address}{fund.name}{fund.description}</li>
+        <li key={index}>
+          {fund.address}{fund.name}{fund.description}
+          <button onClick={(e) => this.sendFunds(fund.address, 1, e)}>Send Funds</button>
+        </li>
       );
 
     return (
@@ -137,7 +145,7 @@ class App extends Component {
 
         <h3>Funds</h3>
           <ul>
-          {fundItems}
+            {fundItems}
          </ul>
 
         <h4>Submit a new Fund Proposal</h4>
