@@ -74,7 +74,7 @@ class App extends Component {
 
     if (ipfsHashList.length > 0) {
       var results = new Promise((resolve, reject) => {
-        const requests = ipfsHashList.map(function(ipfsHash) {
+        ipfsHashList.map(function(ipfsHash) {
           ipfs.files.cat(ipfsHash, function (err, files) {
             if (err) {
               console.error(err);
@@ -102,7 +102,6 @@ class App extends Component {
   }
 
   sendFunds(address, funds) {
-    // TO DO: Fix error here for nonce
     this.fundInstance.donateToFund(address, funds, {from: this.state.account});
   }
 
@@ -131,10 +130,12 @@ class App extends Component {
 
   render() {
       const fundItems = this.state.completeFundList.map((fund, index) =>
-        <li key={index}>
-          {fund.address}{fund.name}{fund.description}
+        <div key={index}>
+          <div><h1>Name: {fund.name}</h1></div>
+          <div>Address: {fund.address}</div>
+          <div>Description: {fund.description}</div>
           <button onClick={(e) => this.sendFunds(fund.address, 1, e)}>Send Funds</button>
-        </li>
+        </div>
       );
 
     return (
@@ -144,9 +145,7 @@ class App extends Component {
         <h3>{this.state.fundCount || 0} funds to contribute to currently.</h3>
 
         <h3>Funds</h3>
-          <ul>
-            {fundItems}
-         </ul>
+          {fundItems}
 
         <h4>Submit a new Fund Proposal</h4>
         <form onSubmit={this.onSubmit}>
