@@ -51,14 +51,13 @@ contract Fund {
 
   /** @dev Stores a ipfsHash of the users fund in a struct
   * @param addr address of the fund the user wants to send funds to
-  * @param eth amount the user is attempting to send to the fund
   */
-  function donateToFund(address addr, uint eth) public payable {
+  function donateToFund(address addr) public payable {
     // TO DO - Refactor
     // find what fund they want to donate to here
     // uint fundID
     /* var fund = funds[fundID]; */
-    addr.transfer(eth);
+    addr.transfer(msg.value);
   }
 
   // commenting this out for now - not needed for now
