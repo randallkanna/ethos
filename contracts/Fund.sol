@@ -10,8 +10,6 @@ contract Fund {
   mapping (address => uint) private balances;
 
 	/* event Deposit(address sender, uint amount); */
-  // TODO - Add withdraw event
-
   /* event DonatedToFund(
     address donater;
     uint256 value;
@@ -37,6 +35,13 @@ contract Fund {
     return ipfsHash;
   }
 
+  /** @dev returns the fund associated with a users address
+  * @param addr users address
+  */
+  function getFundHashByAddress(address addr) public view returns (string) {
+     return funds[addr].ipfsHash;
+  }
+
   /** @dev Stores a ipfsHash of the users fund in a struct
   * @param ipfs string of the IPFS hash.
   */
@@ -56,14 +61,15 @@ contract Fund {
     addr.transfer(eth);
   }
 
+  // commenting this out for now - not needed for now
   /** @dev lets the user withdraw funds from contract
   * @param withdrawAmount is the sum the user wants to withdraw
   */
-  function withdrawFunds(uint withdrawAmount) public payable {
+  /* function withdrawFunds(uint withdrawAmount) public payable {
     require(msg.sender == owner);
 
     msg.sender.transfer(withdrawAmount);
-  }
+  } */
 
   /** @dev Returns the users funds
   */
