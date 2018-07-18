@@ -23,11 +23,14 @@ class App extends Component {
       fundCount: '',
       funds: [],
       completeFundList: [],
+      ipfsBuffer: null,
+      ipfsDocumentHash: '',
     }
 
     this.setStateValues = this.setStateValues.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.sendFunds = this.sendFunds.bind(this);
+    this.captureFile = this.captureFile.bind(this);
   }
 
   componentWillMount() {
@@ -68,6 +71,16 @@ class App extends Component {
 
   setStateValues(event) {
      this.setState({[event.target.name]: event.target.value})
+  }
+
+  captureFile(event) {
+    event.preventDefault()
+    const file = event.target.files[0]
+    const reader = new window.FileReader()
+    reader.readAsArrayBuffer(file)
+    reader.onloadend = () => {
+      this.setState({ ipfsBuffer: Buffer(reader.result) })
+    }
   }
 
   showAllFunds() {
@@ -111,33 +124,48 @@ class App extends Component {
   onSubmit(event) {
     event.preventDefault();
 
-    const hashData = JSON.stringify({
-      name: this.state.fundName,
-      description: this.state.fundDescription,
-      address: this.state.account,
+    var results = new Promise((resolve, reject) => {
+      ipfs.files.add(this.state.ipfsBuffer, (error, result) => {
+        if(error) {
+          console.error(error)
+          return
+        }
+
+        this.setState({ ipfsDocumentHash: result[0].hash })
+        resolve();
+      })
     })
 
-    ipfs.add(Buffer.from(hashData), (err, result) => {
-      if (err) {
-        console.error(err);
-        return;
-      }
+    results.then(() => {
+      const hashData = JSON.stringify({
+        name: this.state.fundName,
+        description: this.state.fundDescription,
+        address: this.state.account,
+        fileUpload: this.state.ipfsDocumentHash,
+      })
 
-      this.fundInstance.createFund(result[0].hash, {from: this.state.account})
-      this.setState({ funds: [...this.state.funds, result[0].hash] })
-      this.showAllFunds();
-      this.showFundsCount();
-      return this.setState({ipfsHash: result[0].hash});
+      ipfs.add(Buffer.from(hashData), (err, result) => {
+        if (err) {
+          console.error(err);
+          return;
+        }
+
+        this.fundInstance.createFund(result[0].hash, {from: this.state.account})
+        this.setState({ funds: [...this.state.funds, result[0].hash] })
+        this.showAllFunds();
+        this.showFundsCount();
+        return this.setState({ipfsHash: result[0].hash});
+      });
     });
   }
 
-  // <input type="hidden" value={fund.address}/>
   render() {
       const fundItems = this.state.completeFundList.map((fund, index) =>
         <div key={index}>
           <div><h1>Name: {fund.name}</h1></div>
           <div>Address: {fund.address}</div>
           <div>Description: {fund.description}</div>
+          <a href={`https://ipfs.io/ipfs/${fund.fileUpload}`}>Additional File from Fund</a>
 
           <div> Want to donate?
             <form onSubmit={(e) => {this.sendFunds(e, fund.address)}}>
@@ -161,6 +189,7 @@ class App extends Component {
         <form onSubmit={this.onSubmit}>
           Fund Name: <input type="text" name="fundName" value={this.state.fundName} onChange={(e) => this.setStateValues(e)} />
           Fund Description: <input type="text" name="fundDescription" value={this.state.fundDescription} onChange={(e) => this.setStateValues(e)} />
+          Document/Whitepaper/Image Upload: <input type="file" onChange={this.captureFile} />
           <input type="submit" />
         </form>
       </div>
