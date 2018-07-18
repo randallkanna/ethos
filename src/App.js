@@ -18,14 +18,16 @@ class App extends Component {
       account: null,
       fundName: '',
       fundDescription: '',
+      fundDonation: 0,
       ipfsHash: '',
       fundCount: '',
       funds: [],
       completeFundList: [],
     }
 
-    this.createFund = this.createFund.bind(this);
+    this.setStateValues = this.setStateValues.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+    this.sendFunds = this.sendFunds.bind(this);
   }
 
   componentWillMount() {
@@ -64,7 +66,7 @@ class App extends Component {
     })
   }
 
-  createFund(event) {
+  setStateValues(event) {
      this.setState({[event.target.name]: event.target.value})
   }
 
@@ -101,8 +103,9 @@ class App extends Component {
     return this.setState({fundCount: this.state.funds.length})
   }
 
-  sendFunds(address, funds) {
-    this.fundInstance.donateToFund(address, funds, {from: this.state.account});
+  sendFunds(event, address) {
+    event.preventDefault();
+    this.fundInstance.donateToFund(address, {from: this.state.account, value: this.state.fundDonation});
   }
 
   onSubmit(event) {
@@ -128,13 +131,20 @@ class App extends Component {
     });
   }
 
+  // <input type="hidden" value={fund.address}/>
   render() {
       const fundItems = this.state.completeFundList.map((fund, index) =>
         <div key={index}>
           <div><h1>Name: {fund.name}</h1></div>
           <div>Address: {fund.address}</div>
           <div>Description: {fund.description}</div>
-          <button onClick={(e) => this.sendFunds(fund.address, 1, e)}>Send Funds</button>
+
+          <div> Want to donate?
+            <form onSubmit={(e) => {this.sendFunds(e, fund.address)}}>
+              <input type="number" name="fundDonation" value={this.state.fundDonation} onChange={(e) => this.setStateValues(e)} />
+              <input type="submit" / >
+            </form>
+          </div>
         </div>
       );
 
@@ -149,8 +159,8 @@ class App extends Component {
 
         <h4>Submit a new Fund Proposal</h4>
         <form onSubmit={this.onSubmit}>
-          Fund Name: <input type="text" name="fundName" value={this.state.fundName} onChange={(e) => this.createFund(e)} />
-          Fund Description: <input type="text" name="fundDescription" value={this.state.fundDescription} onChange={(e) => this.createFund(e)} />
+          Fund Name: <input type="text" name="fundName" value={this.state.fundName} onChange={(e) => this.setStateValues(e)} />
+          Fund Description: <input type="text" name="fundDescription" value={this.state.fundDescription} onChange={(e) => this.setStateValues(e)} />
           <input type="submit" />
         </form>
       </div>
