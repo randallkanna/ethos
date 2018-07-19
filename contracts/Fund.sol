@@ -3,7 +3,7 @@ pragma solidity ^0.4.24;
 import 'openzeppelin-solidity/contracts/ownership/Ownable.sol';
 
 /** @title Fund */
-contract Fund is Ownable {
+contract Fund is Ownable { // Library integration
   /* event Deposit(address sender, uint amount); */
   /* event DonatedToFund(
   address donater;
@@ -46,12 +46,15 @@ contract Fund is Ownable {
     string ipfsHash;
   }
 
-  /*
-  Commenting this out for now as it's not needed
-   function set(string x) public {
+  /** @dev sets the ipfs hash for contract
+  * @param x ipfs hash
+  */
+  function set(string x) public {
     ipfsHash = x;
-  } */
+  }
 
+  /** @dev returns the ipfshash associated
+  */
   function get() public view returns (string) {
     return ipfsHash;
   }

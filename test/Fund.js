@@ -58,6 +58,22 @@ contract('Fund', function(accounts) {
     // assert.equal(deposit.plus(1000).toString(), balance, 'deposit amount incorrect, check deposit method');
   });
 
+  it("should not allow a user to call certain functions while stopped", async () => {
+    await fund.stop();
+    await fund.set("ipfsHash");
+    let getipfshHash = await fund.get();
+    assert.equal(getipfshHash, "ipfsHash");
+  });
+
+  it('should return to normal contract state after stop contract is over', async () => {
+    await fund.stop();
+    await fund.start();
+    await fund.set("ipfsHash")
+    let getipfshHash = await fund.get();
+
+    assert.equal(getipfshHash, "ipfsHash");
+  });
+
   // it("should withdraw the entire balance from the fund to the fund owners account", async () => {
   //   const fundDeposit = 2;
   //   const title = "Wildlife Fund ABC";
