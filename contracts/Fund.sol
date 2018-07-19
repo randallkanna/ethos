@@ -1,19 +1,40 @@
 pragma solidity ^0.4.24;
 
+import 'openzeppelin-solidity/contracts/ownership/Ownable.sol';
+
 /** @title Fund */
-contract Fund {
+contract Fund is Ownable {
+  /* event Deposit(address sender, uint amount); */
+  /* event DonatedToFund(
+  address donater;
+  uint256 value;
+  ) */
+  event Stop();
+  event Start();
+
   address public owner;
   uint fundID;
   string ipfsHash;
+  bool public stopped = false; // paused
 
   mapping(address => FundStorage) public funds;
   mapping (address => uint) private balances;
 
-	/* event Deposit(address sender, uint amount); */
-  /* event DonatedToFund(
-    address donater;
-    uint256 value;
-  ) */
+  /**
+   * @dev Only allows a function to be called when the contract is not stopped
+   */
+  modifier whenNotStopped() {
+    require(!stopped);
+    _;
+  }
+
+  /**
+   * @dev Only allows a function to be called when the contract is paused
+   */
+  modifier whenStopped() {
+    require(stopped);
+    _;
+  }
 
   constructor() {
     owner = msg.sender;
@@ -38,21 +59,21 @@ contract Fund {
   /** @dev returns the fund associated with a users address
   * @param addr users address
   */
-  function getFundHashByAddress(address addr) public view returns (string) {
+  function getFundHashByAddress(address addr) public view whenNotStopped returns (string) {
      return funds[addr].ipfsHash;
   }
 
   /** @dev Stores a ipfsHash of the users fund in a struct
   * @param ipfs string of the IPFS hash.
   */
-  function createFund(string ipfs) public {
+  function createFund(string ipfs) public whenNotStopped {
     funds[msg.sender] = FundStorage({ipfsHash: ipfs, fundCreator: msg.sender});
   }
 
   /** @dev Stores a ipfsHash of the users fund in a struct
   * @param addr address of the fund the user wants to send funds to
   */
-  function donateToFund(address addr) public payable {
+  function donateToFund(address addr) public whenNotStopped payable {
     // TO DO - Refactor
     // find what fund they want to donate to here
     // uint fundID
@@ -72,7 +93,23 @@ contract Fund {
 
   /** @dev Returns the users funds
   */
-  function balance() public constant returns (uint) {
+  function balance() public constant whenNotStopped returns (uint) {
     return balances[msg.sender];
+  }
+
+  /**
+  * @dev stops the contract
+  */
+  function stop() onlyOwner whenNotStopped public {
+    stopped = true;
+    emit Stop();
+  }
+
+  /**
+   * @dev starts the contract again and returns to normal state
+   */
+  function start() onlyOwner whenStopped public {
+    stopped = false;
+    emit Start();
   }
 }
