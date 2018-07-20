@@ -3,6 +3,9 @@ import FundContract from '../build/contracts/Fund.json'
 import getWeb3 from './utils/getWeb3'
 import ipfs from './ipfs';
 
+import Nav from './Navbar.js';
+import { Row, Grid, Col, } from 'react-bootstrap'
+
 import './css/oswald.css'
 import './css/open-sans.css'
 import './css/pure-min.css'
@@ -177,21 +180,30 @@ class App extends Component {
       );
 
     return (
-      <div className="wrapper">
-        <h1>Ethos Crowdfunding</h1>
+      <div className="nav-bar-custom">
+        <Nav/>
+        <div>
+          <Grid>
+            <Row className="show-grid">
+              <Col xs={12} md={12}>
+                <div className="wrapper">
+                  <h3>{this.state.fundCount || 0} funds to contribute to currently.</h3>
 
-        <h3>{this.state.fundCount || 0} funds to contribute to currently.</h3>
+                  <h3>Funds</h3>
+                    {fundItems}
 
-        <h3>Funds</h3>
-          {fundItems}
-
-        <h4>Submit a new Fund Proposal</h4>
-        <form onSubmit={this.onSubmit}>
-          Fund Name: <input type="text" name="fundName" value={this.state.fundName} onChange={(e) => this.setStateValues(e)} />
-          Fund Description: <input type="text" name="fundDescription" value={this.state.fundDescription} onChange={(e) => this.setStateValues(e)} />
-          Document/Whitepaper/Image Upload: <input type="file" onChange={this.captureFile} />
-          <input type="submit" />
-        </form>
+                  <h4>Submit a new Fund Proposal</h4>
+                  <form onSubmit={this.onSubmit}>
+                    Fund Name: <input type="text" name="fundName" value={this.state.fundName} onChange={(e) => this.setStateValues(e)} />
+                    Fund Description: <input type="text" name="fundDescription" value={this.state.fundDescription} onChange={(e) => this.setStateValues(e)} />
+                    Document/Whitepaper/Image Upload: <input type="file" onChange={this.captureFile} />
+                    <input type="submit" />
+                  </form>
+                </div>
+              </Col>
+            </Row>
+          </Grid>
+        </div>
       </div>
     );
   }
