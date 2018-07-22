@@ -121,7 +121,9 @@ class App extends Component {
 
   sendFunds(event, address) {
     event.preventDefault();
-    this.fundInstance.donateToFund(address, {from: this.state.account, value: this.state.fundDonation});
+    var inWei = this.state.web3.toWei(this.state.fundDonation, 'ether');
+
+    this.fundInstance.donateToFund(address, {from: this.state.account, value: inWei});
   }
 
   onSubmit(event) {
