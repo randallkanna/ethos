@@ -1,0 +1,3 @@
+### Ethos
+
+## Project Setup
