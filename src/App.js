@@ -4,7 +4,7 @@ import getWeb3 from './utils/getWeb3'
 import ipfs from './ipfs';
 
 import Nav from './Navbar.js';
-import { Row, Grid, Col, } from 'react-bootstrap'
+import { Button, Row, Grid, Col, Media, Modal, } from 'react-bootstrap'
 
 import './css/oswald.css'
 import './css/open-sans.css'
@@ -28,12 +28,15 @@ class App extends Component {
       completeFundList: [],
       ipfsBuffer: null,
       ipfsDocumentHash: '',
+      activeDonateModal: null,
     }
 
     this.setStateValues = this.setStateValues.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.sendFunds = this.sendFunds.bind(this);
     this.captureFile = this.captureFile.bind(this);
+    this.clickHandler = this.clickHandler.bind(this);
+    this.hideDonateModal = this.hideDonateModal.bind(this);
   }
 
   componentWillMount() {
@@ -70,6 +73,14 @@ class App extends Component {
         return this.fundInstance.get.call(accounts[0])
       })
     })
+  }
+
+  clickHandler(e, index) {
+    this.setState({ activeDonateModal: index })
+  }
+
+  hideDonateModal() {
+    this.setState({ activeDonateModal: null })
   }
 
   setStateValues(event) {
@@ -123,7 +134,7 @@ class App extends Component {
     event.preventDefault();
     var inWei = this.state.web3.toWei(this.state.fundDonation, 'ether');
 
-    this.fundInstance.donateToFund(address, {from: this.state.account, value: inWei});
+    this.fundInstance.donateToFund(address,  {from: this.state.account, value: inWei});
   }
 
   onSubmit(event) {
@@ -167,19 +178,40 @@ class App extends Component {
   render() {
       const fundItems = this.state.completeFundList.map((fund, index) =>
         <div key={index}>
-          <div><h1>Name: {fund.name}</h1></div>
-          <div>Address: {fund.address}</div>
-          <div>Description: {fund.description}</div>
-          <a href={`https://ipfs.io/ipfs/${fund.fileUpload}`}>Additional File from Fund</a>
+          <Media>
+            <Media.Left>
+              <Button bsStyle="primary" bsSize="small" onClick={e => this.clickHandler(e, index)}>
+                Donate
+              </Button>
 
-          <div> Want to donate?
-            <form onSubmit={(e) => {this.sendFunds(e, fund.address)}}>
-              <input type="number" name="fundDonation" value={this.state.fundDonation} onChange={(e) => this.setStateValues(e)} />
-              <input type="submit" / >
-            </form>
-          </div>
+              <Modal id={index} show={this.state.activeDonateModal === index} onHide={this.hideDonateModal}>
+                <Modal.Header closeButton>
+                  <Modal.Title>Donate</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                  <div> Want to donate to {fund.name}?
+                    <form onSubmit={(e) => {this.sendFunds(e, fund.address)}}>
+                    <input type="number" name="fundDonation" value={this.state.fundDonation} onChange={(e) => this.setStateValues(e)} />
+                    <input type="submit" / >
+                    </form>
+                  </div>
+                 </Modal.Body>
+                <Modal.Footer>
+                </Modal.Footer>
+              </Modal>
+            </Media.Left>
+            <Media.Body>
+              <Media.Heading>{fund.name}</Media.Heading>
+              <p>
+                {fund.description}
+              </p>
+              <a href={`https://ipfs.io/ipfs/${fund.fileUpload}`}>Additional File from Fund</a>
+            </Media.Body>
+          </Media>
         </div>
       );
+
+      // TODO: move fundCount into Nav? 'We're funding ___ projects!
 
     return (
       <div className="nav-bar-custom">
@@ -187,13 +219,13 @@ class App extends Component {
         <div>
           <Grid>
             <Row className="show-grid">
-              <Col xs={12} md={12}>
-                <div className="wrapper">
-                  <h3>{this.state.fundCount || 0} funds to contribute to currently.</h3>
+              <Col md={8}>
+                <h3>{this.state.fundCount || 0} funds to contribute to currently.</h3>
 
-                  <h3>Funds</h3>
-                    {fundItems}
-
+                <h3>Funds</h3>
+                  {fundItems}
+              </Col>
+              <Col md={4}>
                   <h4>Submit a new Fund Proposal</h4>
                   <form onSubmit={this.onSubmit}>
                     Fund Name: <input type="text" name="fundName" value={this.state.fundName} onChange={(e) => this.setStateValues(e)} />
@@ -201,7 +233,6 @@ class App extends Component {
                     Document/Whitepaper/Image Upload: <input type="file" onChange={this.captureFile} />
                     <input type="submit" />
                   </form>
-                </div>
               </Col>
             </Row>
           </Grid>
