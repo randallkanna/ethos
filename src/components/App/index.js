@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import FundContract from '../../../build/contracts/Fund.json'
 import getWeb3 from '../../utils/getWeb3'
 import ipfs from '../../ipfs';
+import firebase from '../../firebase.js'
 
 import Nav from '../../Navbar.js';
 import { Button, Row, Grid, Col, Media, Modal, } from 'react-bootstrap'
@@ -24,12 +25,34 @@ class App extends Component {
       fundDonation: 0,
       ipfsHash: '',
       fundCount: '',
-      funds: [], // randall: changed this from an array to object
+      funds: {},
       completeFundList: [],
       ipfsBuffer: null,
       ipfsDocumentHash: '',
       activeDonateModal: null,
     }
+
+    // this.fundsRef.on('value', data=> {
+    //   debugger;
+    //   this.setState({
+    //     funds: data.val()
+    //   })
+    // })
+    this.fundsRef = firebase.database().ref('funds');
+    this.fundsRef.on('value', (snapshot) => {
+      let funds = snapshot.val();
+      let newState = [];
+      for (let fund in funds) {
+        newState.push({
+          hash: funds[fund].hash
+        });
+      }
+      debugger;
+
+      this.setState({
+        funds: newState
+      });
+    });
 
     this.setStateValues = this.setStateValues.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -37,6 +60,7 @@ class App extends Component {
     this.captureFile = this.captureFile.bind(this);
     this.clickHandler = this.clickHandler.bind(this);
     this.hideDonateModal = this.hideDonateModal.bind(this);
+    this.addHash = this.addHash.bind(this);
   }
 
   componentWillMount() {
@@ -54,6 +78,10 @@ class App extends Component {
       this.showFundsCount();
       this.showAllFunds();
     })
+  }
+
+  componentWillUnmount(){
+    firebase.removeBinding(this.itemsRef)
   }
 
   instantiateContract() {
@@ -85,6 +113,12 @@ class App extends Component {
 
   setStateValues(event) {
      this.setState({[event.target.name]: event.target.value})
+  }
+
+  addHash(hash) {
+    this.fundsRef.push({
+      hash,
+    })
   }
 
   captureFile(event) {
@@ -152,7 +186,8 @@ class App extends Component {
           return
         }
 
-        this.setState({ ipfsDocumentHash: result[0].hash })
+        this.setState({ ipfsDocumentHash: result[0].hash });
+        this.addHash(result[0].hash);
         resolve();
       })
     })
