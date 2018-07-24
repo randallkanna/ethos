@@ -58,8 +58,6 @@ class App extends Component {
          funds: newState
        });
 
-       // debugger;
-
        this.showFundsCount();
        this.showAllFunds();
      });
