@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import FundContract from '../build/contracts/Fund.json'
 import getWeb3 from './utils/getWeb3'
 import ipfs from './ipfs';
+import { fire } from '../../fire';
 
 import Nav from './Navbar.js';
 import { Button, Row, Grid, Col, Media, Modal, } from 'react-bootstrap'
@@ -24,12 +25,20 @@ class App extends Component {
       fundDonation: 0,
       ipfsHash: '',
       fundCount: '',
-      funds: [],
+      funds: {}, // randall: changed this from an array to object
       completeFundList: [],
       ipfsBuffer: null,
       ipfsDocumentHash: '',
       activeDonateModal: null,
     }
+
+    var fundsRef = fire.database().ref('funds');
+
+    this.fundsRef.on('value', data=> {
+      this.setState({
+        funds: data.val()
+      })
+    });
 
     this.setStateValues = this.setStateValues.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -37,6 +46,7 @@ class App extends Component {
     this.captureFile = this.captureFile.bind(this);
     this.clickHandler = this.clickHandler.bind(this);
     this.hideDonateModal = this.hideDonateModal.bind(this);
+    this.addHash = this.addHash.bind(this);
   }
 
   componentWillMount() {
@@ -53,6 +63,17 @@ class App extends Component {
     }).then(() => {
       this.showFundsCount();
       this.showAllFunds();
+    })
+  }
+
+  componentWillUnmount() {
+    fire.removeBinding(this.fundsRef)
+  }
+
+  addHash(e, hash) {
+    e.preventDefault();
+    this.fundsRef.push({
+      ipfsHash: hash,
     })
   }
 
@@ -98,7 +119,12 @@ class App extends Component {
   }
 
   showAllFunds() {
+    // TODO Randall: REFACTOR
+    debugger;
     const ipfsHashList = this.state.funds;
+
+    debugger;
+
     const ipfsFundData = [];
 
     if (ipfsHashList.length > 0) {
@@ -148,6 +174,7 @@ class App extends Component {
         }
 
         this.setState({ ipfsDocumentHash: result[0].hash })
+        this.addHash(result[0].hash);
         resolve();
       })
     })
