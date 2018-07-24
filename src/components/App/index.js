@@ -1,15 +1,16 @@
 import React, { Component } from 'react'
-import FundContract from '../build/contracts/Fund.json'
-import getWeb3 from './utils/getWeb3'
-import ipfs from './ipfs';
+import FundContract from '../../../build/contracts/Fund.json'
+import getWeb3 from '../../utils/getWeb3'
+import ipfs from '../../ipfs';
+import firebase from '../../firebase.js'
 
-import Nav from './Navbar.js';
+import Nav from '../../Navbar.js';
 import { Button, Row, Grid, Col, Media, Modal, } from 'react-bootstrap'
 
-import './css/oswald.css'
-import './css/open-sans.css'
-import './css/pure-min.css'
-import './App.css'
+import '../../css/oswald.css'
+import '../../css/open-sans.css'
+import '../../css/pure-min.css'
+import './style.css'
 
 class App extends Component {
   constructor(props) {
@@ -24,12 +25,14 @@ class App extends Component {
       fundDonation: 0,
       ipfsHash: '',
       fundCount: '',
-      funds: [],
+      funds: {},
       completeFundList: [],
       ipfsBuffer: null,
       ipfsDocumentHash: '',
       activeDonateModal: null,
     }
+
+    this.fundsRef = firebase.database().ref('funds');
 
     this.setStateValues = this.setStateValues.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -37,6 +40,27 @@ class App extends Component {
     this.captureFile = this.captureFile.bind(this);
     this.clickHandler = this.clickHandler.bind(this);
     this.hideDonateModal = this.hideDonateModal.bind(this);
+    this.addHash = this.addHash.bind(this);
+  }
+
+  componentDidMount() {
+    const fundsRef = firebase.database().ref('funds');
+     fundsRef.on('value', (snapshot) => {
+       let funds = snapshot.val();
+       let newState = [];
+       for (let fund in funds) {
+         newState.push({
+           hash: funds[fund].hash
+         });
+       }
+
+       this.setState({
+         funds: newState
+       });
+
+       this.showFundsCount();
+       this.showAllFunds();
+     });
   }
 
   componentWillMount() {
@@ -51,9 +75,13 @@ class App extends Component {
     .catch(() => {
       console.log('Error finding web3.')
     }).then(() => {
-      this.showFundsCount();
-      this.showAllFunds();
+      // this.showFundsCount();
+      // this.showAllFunds();
     })
+  }
+
+  componentWillUnmount(){
+    firebase.removeBinding(this.fundsRef)
   }
 
   instantiateContract() {
@@ -87,6 +115,12 @@ class App extends Component {
      this.setState({[event.target.name]: event.target.value})
   }
 
+  addHash(hash) {
+    this.fundsRef.push({
+      hash,
+    })
+  }
+
   captureFile(event) {
     event.preventDefault()
     const file = event.target.files[0]
@@ -104,7 +138,9 @@ class App extends Component {
     if (ipfsHashList.length > 0) {
       var results = new Promise((resolve, reject) => {
         ipfsHashList.map(function(ipfsHash) {
-          ipfs.files.cat(ipfsHash, function (err, files) {
+          // debugger;
+          ipfs.files.cat(ipfsHash.hash, function (err, files) {
+            // debugger;
             if (err) {
               console.error(err);
               return;
@@ -147,7 +183,7 @@ class App extends Component {
           return
         }
 
-        this.setState({ ipfsDocumentHash: result[0].hash })
+        this.setState({ ipfsDocumentHash: result[0].hash });
         resolve();
       })
     })
@@ -168,6 +204,7 @@ class App extends Component {
 
         this.fundInstance.createFund(result[0].hash, {from: this.state.account})
         this.setState({ funds: [...this.state.funds, result[0].hash] })
+        this.addHash(result[0].hash);
         this.showAllFunds();
         this.showFundsCount();
         return this.setState({ipfsHash: result[0].hash});
