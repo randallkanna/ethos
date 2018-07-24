@@ -33,21 +33,6 @@ class App extends Component {
     }
 
     this.fundsRef = firebase.database().ref('funds');
-    // this.fundsRef.on('value', (snapshot) => {
-    //   let funds = snapshot.val();
-    //   let newState = [];
-    //   for (let fund in funds) {
-    //     newState.push({
-    //       hash: funds[fund].hash
-    //     });
-    //   }
-    //
-    //   debugger;
-    //
-    //   this.setState({
-    //     funds: newState
-    //   });
-    // });
 
     this.setStateValues = this.setStateValues.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -62,16 +47,18 @@ class App extends Component {
     const fundsRef = firebase.database().ref('funds');
      fundsRef.on('value', (snapshot) => {
        let funds = snapshot.val();
-       debugger;
        let newState = [];
        for (let fund in funds) {
          newState.push({
            hash: funds[fund].hash
          });
        }
+
        this.setState({
          funds: newState
        });
+
+       // debugger;
 
        this.showFundsCount();
        this.showAllFunds();
@@ -153,9 +140,9 @@ class App extends Component {
     if (ipfsHashList.length > 0) {
       var results = new Promise((resolve, reject) => {
         ipfsHashList.map(function(ipfsHash) {
-          debugger;
+          // debugger;
           ipfs.files.cat(ipfsHash.hash, function (err, files) {
-            debugger;
+            // debugger;
             if (err) {
               console.error(err);
               return;
@@ -199,7 +186,6 @@ class App extends Component {
         }
 
         this.setState({ ipfsDocumentHash: result[0].hash });
-        this.addHash(result[0].hash);
         resolve();
       })
     })
@@ -220,6 +206,7 @@ class App extends Component {
 
         this.fundInstance.createFund(result[0].hash, {from: this.state.account})
         this.setState({ funds: [...this.state.funds, result[0].hash] })
+        this.addHash(result[0].hash);
         this.showAllFunds();
         this.showFundsCount();
         return this.setState({ipfsHash: result[0].hash});
