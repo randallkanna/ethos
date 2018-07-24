@@ -32,27 +32,22 @@ class App extends Component {
       activeDonateModal: null,
     }
 
-    // this.fundsRef.on('value', data=> {
-    //   debugger;
-    //   this.setState({
-    //     funds: data.val()
-    //   })
-    // })
     this.fundsRef = firebase.database().ref('funds');
-    this.fundsRef.on('value', (snapshot) => {
-      let funds = snapshot.val();
-      let newState = [];
-      for (let fund in funds) {
-        newState.push({
-          hash: funds[fund].hash
-        });
-      }
-      debugger;
-
-      this.setState({
-        funds: newState
-      });
-    });
+    // this.fundsRef.on('value', (snapshot) => {
+    //   let funds = snapshot.val();
+    //   let newState = [];
+    //   for (let fund in funds) {
+    //     newState.push({
+    //       hash: funds[fund].hash
+    //     });
+    //   }
+    //
+    //   debugger;
+    //
+    //   this.setState({
+    //     funds: newState
+    //   });
+    // });
 
     this.setStateValues = this.setStateValues.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -61,6 +56,26 @@ class App extends Component {
     this.clickHandler = this.clickHandler.bind(this);
     this.hideDonateModal = this.hideDonateModal.bind(this);
     this.addHash = this.addHash.bind(this);
+  }
+
+  componentDidMount() {
+    const fundsRef = firebase.database().ref('funds');
+     fundsRef.on('value', (snapshot) => {
+       let funds = snapshot.val();
+       debugger;
+       let newState = [];
+       for (let fund in funds) {
+         newState.push({
+           hash: funds[fund].hash
+         });
+       }
+       this.setState({
+         funds: newState
+       });
+
+       this.showFundsCount();
+       this.showAllFunds();
+     });
   }
 
   componentWillMount() {
@@ -75,13 +90,13 @@ class App extends Component {
     .catch(() => {
       console.log('Error finding web3.')
     }).then(() => {
-      this.showFundsCount();
-      this.showAllFunds();
+      // this.showFundsCount();
+      // this.showAllFunds();
     })
   }
 
   componentWillUnmount(){
-    firebase.removeBinding(this.itemsRef)
+    firebase.removeBinding(this.fundsRef)
   }
 
   instantiateContract() {
@@ -132,18 +147,15 @@ class App extends Component {
   }
 
   showAllFunds() {
-    // TODO Randall: REFACTOR
-    debugger;
     const ipfsHashList = this.state.funds;
-
-    debugger;
-
     const ipfsFundData = [];
 
     if (ipfsHashList.length > 0) {
       var results = new Promise((resolve, reject) => {
         ipfsHashList.map(function(ipfsHash) {
-          ipfs.files.cat(ipfsHash, function (err, files) {
+          debugger;
+          ipfs.files.cat(ipfsHash.hash, function (err, files) {
+            debugger;
             if (err) {
               console.error(err);
               return;
