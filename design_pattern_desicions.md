@@ -8,9 +8,6 @@ The contract has several modifiers to verify when the contract is stopped or run
 #### Avoiding Storage of Ether
 While some contracts store currency, our contract instead immediately transfers to the owners address. This provides security as currency is less likely to get stuck in the contract.
 
-#### Getting fund balance when Modal is opened
-To save on gas costs, the contract only queries for a funds balance when the modal is open.
-
 ## Libraries
 The app uses Open Zeppelin for simple libraries such as Ownable. This allows the main contract Fund to import Ownable and use tested functions from an outside library for reliability instead of rebuilding the wheel.
 
