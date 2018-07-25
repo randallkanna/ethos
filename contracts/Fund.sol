@@ -44,6 +44,7 @@ contract Fund is Ownable { // Library integration
   struct FundStorage {
     address fundCreator;
     string ipfsHash;
+    uint fundsRaised;
   }
 
   /** @dev sets the ipfs hash for contract
@@ -59,6 +60,11 @@ contract Fund is Ownable { // Library integration
     return ipfsHash;
   }
 
+  // randall TODO document this
+  function getFundsRaised(address addr) public view whenNotStopped returns (uint) {
+    return funds[addr].fundsRaised;
+  }
+
   /** @dev returns the fund associated with a users address
   * @param addr users address
   */
@@ -70,17 +76,16 @@ contract Fund is Ownable { // Library integration
   * @param ipfs string of the IPFS hash.
   */
   function createFund(string ipfs) public whenNotStopped {
-    funds[msg.sender] = FundStorage({ipfsHash: ipfs, fundCreator: msg.sender});
+    funds[msg.sender] = FundStorage({ipfsHash: ipfs, fundCreator: msg.sender, fundsRaised: 0});
   }
 
   /** @dev Stores a ipfsHash of the users fund in a struct
   * @param addr address of the fund the user wants to send funds to
   */
   function donateToFund(address addr) public whenNotStopped payable {
-    // TO DO - Refactor
-    // find what fund they want to donate to here
-    // uint fundID
     /* var fund = funds[fundID]; */
+    funds[addr].fundsRaised += msg.value;
+
     addr.transfer(msg.value);
   }
 

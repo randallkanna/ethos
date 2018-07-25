@@ -74,9 +74,6 @@ class App extends Component {
     })
     .catch(() => {
       console.log('Error finding web3.')
-    }).then(() => {
-      // this.showFundsCount();
-      // this.showAllFunds();
     })
   }
 
@@ -138,9 +135,7 @@ class App extends Component {
     if (ipfsHashList.length > 0) {
       var results = new Promise((resolve, reject) => {
         ipfsHashList.map(function(ipfsHash) {
-          // debugger;
           ipfs.files.cat(ipfsHash.hash, function (err, files) {
-            // debugger;
             if (err) {
               console.error(err);
               return;
@@ -162,7 +157,7 @@ class App extends Component {
   }
 
   showFundsCount() {
-    // saving gas costs by storying the ipfs hashes in JS for now
+    // saving gas costs by storying the ipfs hashes in firebase.
     return this.setState({fundCount: this.state.funds.length})
   }
 
@@ -172,6 +167,22 @@ class App extends Component {
 
     this.fundInstance.donateToFund(address,  {from: this.state.account, value: inWei});
   }
+
+  // showFundsRaised(addr) {
+  //   // randall
+  //   this.fundInstance.getFundsRaised(addr).then((result) => {
+  //     const balance = this.state.web3.fromWei(result, 'ether');
+  //     debugger;
+  //
+  //     if (balance === "0") {
+  //       debugger;
+  //       return 0;
+  //     } else {
+  //       debugger;
+  //       return balance;
+  //     }
+  //   })
+  // }
 
   onSubmit(event) {
     event.preventDefault();
@@ -212,6 +223,8 @@ class App extends Component {
     });
   }
 
+// comment this back in for fundsRaised
+  // <p>This fund has raised {this.showFundsRaised(fund.address)} to date.</p>
   render() {
       const fundItems = this.state.completeFundList.map((fund, index) =>
         <div key={index}>
