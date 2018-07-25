@@ -74,9 +74,6 @@ class App extends Component {
     })
     .catch(() => {
       console.log('Error finding web3.')
-    }).then(() => {
-      // this.showFundsCount();
-      // this.showAllFunds();
     })
   }
 
@@ -138,9 +135,7 @@ class App extends Component {
     if (ipfsHashList.length > 0) {
       var results = new Promise((resolve, reject) => {
         ipfsHashList.map(function(ipfsHash) {
-          // debugger;
           ipfs.files.cat(ipfsHash.hash, function (err, files) {
-            // debugger;
             if (err) {
               console.error(err);
               return;
@@ -162,7 +157,7 @@ class App extends Component {
   }
 
   showFundsCount() {
-    // saving gas costs by storying the ipfs hashes in JS for now
+    // saving gas costs by storying the ipfs hashes in firebase.
     return this.setState({fundCount: this.state.funds.length})
   }
 
@@ -171,6 +166,16 @@ class App extends Component {
     var inWei = this.state.web3.toWei(this.state.fundDonation, 'ether');
 
     this.fundInstance.donateToFund(address,  {from: this.state.account, value: inWei});
+  }
+
+  showFundsRaised(addr) {
+    const fundsRaised = this.fundInstance.getFundsRaised(addr);
+
+    if (fundsRaised < 0) {
+      return 0;
+    } else {
+      return fundsRaised;
+    }
   }
 
   onSubmit(event) {
@@ -242,6 +247,7 @@ class App extends Component {
               <p>
                 {fund.description}
               </p>
+              <h3>This fund has raised {this.showFundsRaised(fund.address)} to date.</h3>
               <a href={`https://ipfs.io/ipfs/${fund.fileUpload}`}>Additional File from Fund</a>
             </Media.Body>
           </Media>
