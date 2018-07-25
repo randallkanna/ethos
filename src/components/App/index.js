@@ -169,13 +169,18 @@ class App extends Component {
   }
 
   showFundsRaised(addr) {
-    const fundsRaised = this.fundInstance.getFundsRaised(addr);
+    this.fundInstance.getFundsRaised(addr).then((result) => {
+      const fundsRaised = this.state.web3.fromWei(result.toNumber(), "ether")
+      debugger;
 
-    if (fundsRaised < 0) {
-      return 0;
-    } else {
-      return fundsRaised;
-    }
+      if (fundsRaised === "0") {
+        debugger;
+        return 0;
+      } else {
+        debugger;
+        return fundsRaised;
+      }
+    })
   }
 
   onSubmit(event) {
