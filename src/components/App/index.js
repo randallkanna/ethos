@@ -168,21 +168,14 @@ class App extends Component {
     this.fundInstance.donateToFund(address,  {from: this.state.account, value: inWei});
   }
 
-  // showFundsRaised(addr) {
-  //   // randall
-  //   this.fundInstance.getFundsRaised(addr).then((result) => {
-  //     const balance = this.state.web3.fromWei(result, 'ether');
-  //     debugger;
-  //
-  //     if (balance === "0") {
-  //       debugger;
-  //       return 0;
-  //     } else {
-  //       debugger;
-  //       return balance;
-  //     }
-  //   })
-  // }
+  showFundsRaised(addr) {
+    this.fundInstance.getFundsRaised(addr).call().then((result) => {
+      let fundsRaised = this.state.web3.fromWei(result.toNumber(), "ether");
+
+      debugger
+    })
+    //     return this.state.web3.fromWei(result.toNumber(), "ether");
+  }
 
   onSubmit(event) {
     event.preventDefault();
@@ -223,8 +216,6 @@ class App extends Component {
     });
   }
 
-// comment this back in for fundsRaised
-  // <p>This fund has raised {this.showFundsRaised(fund.address)} to date.</p>
   render() {
       const fundItems = this.state.completeFundList.map((fund, index) =>
         <div key={index}>
@@ -240,6 +231,7 @@ class App extends Component {
                 </Modal.Header>
                 <Modal.Body>
                   <div> Want to donate to {fund.name}?
+                    <p>{this.showFundsRaised(fund.address)}</p>
                     <form onSubmit={(e) => {this.sendFunds(e, fund.address)}}>
                     <input type="number" name="fundDonation" value={this.state.fundDonation} onChange={(e) => this.setStateValues(e)} />
                     <input type="submit" / >
