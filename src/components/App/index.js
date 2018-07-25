@@ -168,20 +168,21 @@ class App extends Component {
     this.fundInstance.donateToFund(address,  {from: this.state.account, value: inWei});
   }
 
-  showFundsRaised(addr) {
-    this.fundInstance.getFundsRaised(addr).then((result) => {
-      const fundsRaised = this.state.web3.fromWei(result.toNumber(), "ether")
-      debugger;
-
-      if (fundsRaised === "0") {
-        debugger;
-        return 0;
-      } else {
-        debugger;
-        return fundsRaised;
-      }
-    })
-  }
+  // showFundsRaised(addr) {
+  //   // randall
+  //   this.fundInstance.getFundsRaised(addr).then((result) => {
+  //     const balance = this.state.web3.fromWei(result, 'ether');
+  //     debugger;
+  //
+  //     if (balance === "0") {
+  //       debugger;
+  //       return 0;
+  //     } else {
+  //       debugger;
+  //       return balance;
+  //     }
+  //   })
+  // }
 
   onSubmit(event) {
     event.preventDefault();
@@ -222,6 +223,8 @@ class App extends Component {
     });
   }
 
+// comment this back in for fundsRaised
+  // <p>This fund has raised {this.showFundsRaised(fund.address)} to date.</p>
   render() {
       const fundItems = this.state.completeFundList.map((fund, index) =>
         <div key={index}>
@@ -252,7 +255,6 @@ class App extends Component {
               <p>
                 {fund.description}
               </p>
-              <h3>This fund has raised {this.showFundsRaised(fund.address)} to date.</h3>
               <a href={`https://ipfs.io/ipfs/${fund.fileUpload}`}>Additional File from Fund</a>
             </Media.Body>
           </Media>

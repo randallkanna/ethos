@@ -8,3 +8,6 @@ The contract uses the isOwnable from openzeppelin. Uses a modifier from the libr
 
 ### Visibility
 The contract uses various visibility of public vs. private functions to secure the contract.
+
+## Avoding Ether Storage
+While some contracts store currency, our contract instead immediately transfers to the owners address. This provides security as currency is less likely to get stuck in the contract.
