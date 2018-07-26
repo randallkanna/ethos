@@ -16,6 +16,7 @@ body {
 
 /** overriding all the bootstrap stuff **/
 .navbar {
+  z-index: 10;
   min-width: 100% !important;
   position: sticky !important;
   top: 0 !important;

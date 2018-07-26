@@ -157,7 +157,7 @@ class App extends Component {
   }
 
   showFundsCount() {
-    // saving gas costs by storying the ipfs hashes in firebase.
+    // saving gas costs by storying the ipfs hashes in firebase and getting length from state
     return this.setState({fundCount: this.state.funds.length})
   }
 
@@ -198,7 +198,6 @@ class App extends Component {
         }
 
         this.fundInstance.createFund(result[0].hash, {from: this.state.account})
-        this.setState({ funds: [...this.state.funds, result[0].hash] })
         this.addHash(result[0].hash);
         this.showAllFunds();
         this.showFundsCount();
@@ -240,6 +239,7 @@ class App extends Component {
                 {fund.description}
               </p>
               <a href={`https://ipfs.io/ipfs/${fund.fileUpload}`}>Additional File from Fund</a>
+              <div><Button>Remove fund</Button></div>
             </Media.Body>
           </Media>
         </div>
