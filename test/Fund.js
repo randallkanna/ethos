@@ -38,14 +38,11 @@ contract('Fund', function(accounts) {
 
     let transaction = await fund.donateToFund(fundOwner, {from: donater, value: fundDeposit});
 
-    // var senderNewBalance = web3.eth.getBalance(donater).toNumber();
-    // var tx = await web3.eth.getTransaction(transaction.tx);
-    // var gasUsed = tx.gasPrice.mul(transaction.receipt.gasUsed).toNumber();
+    var senderNewBalance = web3.eth.getBalance(donater).toNumber();
+    var tx = await web3.eth.getTransaction(transaction.tx);
+    var gasUsed = tx.gasPrice.mul(transaction.receipt.gasUsed);
 
-    // console.log(senderOriginalBalance)
-    // console.log(senderNewBalance)
-
-    // assert.strictEqual(senderOriginalBalance - fundDeposit - gasUsed, senderNewBalance, 'should withdraw from donaters account');
+    assert.strictEqual(senderOriginalBalance - fundDeposit - gasUsed, senderNewBalance, 'should withdraw from donaters account');
   });
 
   /**
@@ -60,11 +57,7 @@ contract('Fund', function(accounts) {
     await fund.createFund(ipfsHash, {from: fundOwner});
     await fund.donateToFund(fundOwner, {from: donater, value: fundDeposit});
 
-    // const fundBalanceAccount = web3.eth.getBalance(fundOwner).toNumber();
-    // fundBalanceAccount = await fund.balance.call({from: fundOwner});
     fundBalanceAccount = web3.eth.getBalance(fundOwner).toNumber();
-    console.log(fundBalanceAccount)
-    console.log(fundDeposit.toNumber())
 
     assert.equal(fundBalanceAccount, fundBalanceAccount + fundDeposit.toNumber(), 'should transfer ether to fund owner');
   });
