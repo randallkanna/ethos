@@ -52,41 +52,22 @@ contract('Fund', function(accounts) {
     donateToFund
     Verifies that the contract deposits the right amount into the selected fund
   **/
-  // // TODO: Implement this test
   it("should deposit correct amount into the selected fund", async () => {
     const fundDeposit = web3.toBigNumber(2);
+    // const fundDeposit = 2;
     const ipfsHash = "testABC123";
 
     await fund.createFund(ipfsHash, {from: fundOwner});
     await fund.donateToFund(fundOwner, {from: donater, value: fundDeposit});
 
-    // verify the fund balance?
-    // const balance = await
+    // const fundBalanceAccount = web3.eth.getBalance(fundOwner).toNumber();
+    // fundBalanceAccount = await fund.balance.call({from: fundOwner});
+    fundBalanceAccount = web3.eth.getBalance(fundOwner).toNumber();
+    console.log(fundBalanceAccount)
+    console.log(fundDeposit.toNumber())
 
-    // assert.equal(deposit.plus(1000).toString(), balance, 'deposit amount incorrect, check deposit method');
+    assert.equal(fundBalanceAccount, fundBalanceAccount + fundDeposit.toNumber(), 'should transfer ether to fund owner');
   });
-
-  /**
-  TODO: Insert comments
-  **/
-  // it("should withdraw the entire balance from the fund to the fund owners account", async () => {
-  //   const fundDeposit = 2;
-  //   const title = "Wildlife Fund ABC";
-  //   const description = "Save a crypto kitty!";
-  //
-  //   await fund.createFund(title, description, {from: fundOwner});
-  //   await fund.donateToFund({from: donater, value: fundDeposit});
-  //
-  //   let fundOwnerOriginalBalance = web3.eth.getBalance(fundOwner).toNumber();
-  //
-  //   let transaction = await fund.withdrawFunds(fundDeposit, {from: fundOwner, value: fundDeposit});
-  //
-  //   let fundOwnerNewBalance = web3.eth.getBalance(fundOwner).toNumber();
-  //   var tx = await web3.eth.getTransaction(transaction.tx);
-  //   var gasUsed = tx.gasPrice.mul(transaction.receipt.gasUsed).toNumber();
-  //
-  //   assert.strictEqual(fundOwnerOriginalBalance + fundDeposit - gasUsed, fundOwnerNewBalance, 'transfers proper amount');
-  // });
 
   /**
     This test verifies that a user that created a fund cannot donate to their own fund
@@ -128,4 +109,27 @@ contract('Fund', function(accounts) {
 
     assert.equal(getipfshHash, "ipfsHash");
   });
+
+  /**
+    Removed because the contract no longer stores ether but instead transfers immediately
+  **/
+  // it("should withdraw the entire balance from the fund to the fund owners account", async () => {
+  //   const fundDeposit = 2;
+  //   const title = "Wildlife Fund ABC";
+  //   const description = "Save a crypto kitty!";
+  //
+  //   await fund.createFund(title, description, {from: fundOwner});
+  //   await fund.donateToFund({from: donater, value: fundDeposit});
+  //
+  //   let fundOwnerOriginalBalance = web3.eth.getBalance(fundOwner).toNumber();
+  //
+  //   let transaction = await fund.withdrawFunds(fundDeposit, {from: fundOwner, value: fundDeposit});
+  //
+  //   let fundOwnerNewBalance = web3.eth.getBalance(fundOwner).toNumber();
+  //   var tx = await web3.eth.getTransaction(transaction.tx);
+  //   var gasUsed = tx.gasPrice.mul(transaction.receipt.gasUsed).toNumber();
+  //
+  //   assert.strictEqual(fundOwnerOriginalBalance + fundDeposit - gasUsed, fundOwnerNewBalance, 'transfers proper amount');
+  // });
+
 });
