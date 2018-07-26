@@ -83,6 +83,7 @@ contract Fund is Ownable { // Library integration
   * @param addr address of the fund the user wants to send funds to
   */
   function donateToFund(address addr) public whenNotStopped payable {
+    require(owner != msg.sender);
     /* var fund = funds[fundID]; */
     funds[addr].fundsRaised += msg.value;
 
