@@ -38,32 +38,45 @@ contract('Fund', function(accounts) {
 
     let transaction = await fund.donateToFund(fundOwner, {from: donater, value: fundDeposit});
 
-    // var senderNewBalance = web3.eth.getBalance(donater).toNumber();
-    // var tx = await web3.eth.getTransaction(transaction.tx);
-    // var gasUsed = tx.gasPrice.mul(transaction.receipt.gasUsed).toNumber();
+    var senderNewBalance = web3.eth.getBalance(donater).toNumber();
+    var tx = await web3.eth.getTransaction(transaction.tx);
+    var gasUsed = tx.gasPrice.mul(transaction.receipt.gasUsed);
 
-    // console.log(senderOriginalBalance)
-    // console.log(senderNewBalance)
-
-    // assert.strictEqual(senderOriginalBalance - fundDeposit - gasUsed, senderNewBalance, 'should withdraw from donaters account');
+    assert.strictEqual(senderOriginalBalance - fundDeposit - gasUsed, senderNewBalance, 'should withdraw from donaters account');
   });
 
   /**
     donateToFund
     Verifies that the contract deposits the right amount into the selected fund
   **/
-  // // TODO: Implement this test
   it("should deposit correct amount into the selected fund", async () => {
     const fundDeposit = web3.toBigNumber(2);
+    // const fundDeposit = 2;
     const ipfsHash = "testABC123";
 
     await fund.createFund(ipfsHash, {from: fundOwner});
-    await fund.donateToFund({from: donater, value: fundDeposit});
+    await fund.donateToFund(fundOwner, {from: donater, value: fundDeposit});
 
-    // verify the fund balance?
-    // const balance = await
+    fundBalanceAccount = web3.eth.getBalance(fundOwner).toNumber();
 
-    // assert.equal(deposit.plus(1000).toString(), balance, 'deposit amount incorrect, check deposit method');
+    assert.equal(fundBalanceAccount, fundBalanceAccount + fundDeposit.toNumber(), 'should transfer ether to fund owner');
+  });
+
+  /**
+    This test verifies that a user that created a fund cannot donate to their own fund
+  **/
+  it("should not allow owners to contribute to their own fund", async() => {
+    const fundDeposit = web3.toBigNumber(2);
+    const ipfsHash = "testABC";
+
+    await fund.createFund(ipfsHash, {from: fundOwner});
+
+    try {
+      await fund.donateToFund(fundOwner, {from: fundOwner, value: fundDeposit});
+      assert.ok(false, 'should throw an error when the fund owner tries to donate to their own fund')
+    } catch(error) {
+      assert.ok(true, 'expected throw')
+    }
   });
 
   /**
@@ -91,7 +104,7 @@ contract('Fund', function(accounts) {
   });
 
   /**
-  TODO: Insert comments
+    Removed because the contract no longer stores ether but instead transfers immediately
   **/
   // it("should withdraw the entire balance from the fund to the fund owners account", async () => {
   //   const fundDeposit = 2;
@@ -112,10 +125,4 @@ contract('Fund', function(accounts) {
   //   assert.strictEqual(fundOwnerOriginalBalance + fundDeposit - gasUsed, fundOwnerNewBalance, 'transfers proper amount');
   // });
 
-  /**
-    TODO: insert comments
-  **/
-  // it("should not allow owners to contribute to their own fund", async() => {
-  //   // TODO: Add test
-  // })
 });
