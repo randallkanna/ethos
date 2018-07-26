@@ -168,22 +168,6 @@ class App extends Component {
     this.fundInstance.donateToFund(address,  {from: this.state.account, value: inWei});
   }
 
-  // showFundsRaised(addr) {
-  //   // randall
-  //   this.fundInstance.getFundsRaised(addr).then((result) => {
-  //     const balance = this.state.web3.fromWei(result, 'ether');
-  //     debugger;
-  //
-  //     if (balance === "0") {
-  //       debugger;
-  //       return 0;
-  //     } else {
-  //       debugger;
-  //       return balance;
-  //     }
-  //   })
-  // }
-
   onSubmit(event) {
     event.preventDefault();
 
@@ -223,7 +207,7 @@ class App extends Component {
     });
   }
 
-// comment this back in for fundsRaised
+// TODO - comment this back in for fundsRaised later
   // <p>This fund has raised {this.showFundsRaised(fund.address)} to date.</p>
   render() {
       const fundItems = this.state.completeFundList.map((fund, index) =>
@@ -260,8 +244,6 @@ class App extends Component {
           </Media>
         </div>
       );
-
-      // TODO: move fundCount into Nav? 'We're funding ___ projects!
 
     return (
       <div className="nav-bar-custom">
