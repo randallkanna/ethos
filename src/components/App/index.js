@@ -239,7 +239,6 @@ class App extends Component {
                 {fund.description}
               </p>
               <a href={`https://ipfs.io/ipfs/${fund.fileUpload}`}>Additional File from Fund</a>
-              <div><Button>Remove fund</Button></div>
             </Media.Body>
           </Media>
         </div>
