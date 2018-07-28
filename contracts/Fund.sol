@@ -1,9 +1,9 @@
 pragma solidity ^0.4.24;
 
-import 'openzeppelin-solidity/contracts/ownership/Ownable.sol';
+import 'openzeppelin-solidity/contracts/lifecycle/Pausable.sol';
 
 /** @title Fund */
-contract Fund is Ownable { // Library integration
+contract Fund is Pausable { // Library integration
   /* event Deposit(address sender, uint amount); */
   /* event DonatedToFund(
   address donater;
@@ -61,28 +61,28 @@ contract Fund is Ownable { // Library integration
   }
 
   // randall TODO document this
-  function getFundsRaised(address addr) public view whenNotStopped returns (uint) {
+  function getFundsRaised(address addr) public view whenNotPaused returns (uint) {
     return funds[addr].fundsRaised;
   }
 
   /** @dev returns the fund associated with a users address
   * @param addr users address
   */
-  function getFundHashByAddress(address addr) public view whenNotStopped returns (string) {
+  function getFundHashByAddress(address addr) public view whenNotPaused returns (string) {
      return funds[addr].ipfsHash;
   }
 
   /** @dev Stores a ipfsHash of the users fund in a struct
   * @param ipfs string of the IPFS hash.
   */
-  function createFund(string ipfs) public whenNotStopped {
+  function createFund(string ipfs) public whenNotPaused {
     funds[msg.sender] = FundStorage({ipfsHash: ipfs, fundCreator: msg.sender, fundsRaised: 0});
   }
 
   /** @dev Stores a ipfsHash of the users fund in a struct
   * @param addr address of the fund the user wants to send funds to
   */
-  function donateToFund(address addr) public whenNotStopped payable {
+  function donateToFund(address addr) public whenNotPaused payable {
     require(owner != msg.sender);
     /* funds[addr].fundsRaised += msg.value; */
 
@@ -101,23 +101,24 @@ contract Fund is Ownable { // Library integration
 
   /** @dev Returns the users funds
   */
-  function balance() public constant whenNotStopped returns (uint) {
+  function balance() public constant whenNotPaused returns (uint) {
     return balances[msg.sender];
   }
 
+  // Example of implement pause contract. Removing this in favor of using openzeppelin
   /**
   * @dev stops the contract
   */
-  function stop() onlyOwner whenNotStopped public {
+  /* function stop() onlyOwner whenNotStopped public {
     stopped = true;
     emit Stop();
-  }
+  } */
 
   /**
    * @dev starts the contract again and returns to normal state
    */
-  function start() onlyOwner whenStopped public {
+  /* function start() onlyOwner whenStopped public {
     stopped = false;
     emit Start();
-  }
+  } */
 }
