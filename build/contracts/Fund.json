@@ -339,8 +339,8 @@
           }
         ],
         "contractDependencies": [
-          312,
-          226
+          226,
+          312
         ],
         "contractKind": "contract",
         "documentation": "@title Fund ",
@@ -2276,8 +2276,8 @@
           }
         ],
         "contractDependencies": [
-          312,
-          226
+          226,
+          312
         ],
         "contractKind": "contract",
         "documentation": "@title Fund ",
@@ -4167,10 +4167,10 @@
     "4447": {
       "events": {},
       "links": {},
-      "address": "0x2c2b9c9a4a25e24b174f26114e8926a9f2128fe4",
-      "transactionHash": "0x5b5f0e2b2d045f33531cb9cde4e7ff87a49276a80d9e43f84bb0c8218a9f1701"
+      "address": "0xbaaa2a3237035a2c7fa2a33c76b44a8c6fe18e87",
+      "transactionHash": "0x90f9f4967a71710de1d088c5a0c94f5d79209ce7cc890c8a858574bc1842b1d9"
     }
   },
   "schemaVersion": "2.0.1",
-  "updatedAt": "2018-07-28T22:32:56.082Z"
+  "updatedAt": "2018-08-03T22:49:21.684Z"
 }
