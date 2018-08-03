@@ -9,32 +9,31 @@ contract Fund is Pausable { // Library integration
   address donater;
   uint256 value;
   ) */
-  event Stop();
-  event Start();
 
   address public owner;
   uint fundID;
   string ipfsHash;
-  bool public stopped = false; // paused
+  /* bool public stopped = false; // paused */ // removed because I'm using pausable
 
   mapping(address => FundStorage) public funds;
   mapping (address => uint) private balances;
 
+  // commenting this out because I mvoed to pausable
   /**
    * @dev Only allows a function to be called when the contract is not stopped
    */
-  modifier whenNotStopped() {
+  /* modifier whenNotStopped() {
     require(!stopped);
     _;
-  }
+  } */
 
   /**
    * @dev Only allows a function to be called when the contract is paused
    */
-  modifier whenStopped() {
+  /* modifier whenStopped() {
     require(stopped);
     _;
-  }
+  } */
 
   constructor() {
     owner = msg.sender;
@@ -60,10 +59,10 @@ contract Fund is Pausable { // Library integration
     return ipfsHash;
   }
 
-  // randall TODO document this
+  /* // randall TODO document this
   function getFundsRaised(address addr) public view whenNotPaused returns (uint) {
     return funds[addr].fundsRaised;
-  }
+  } */
 
   /** @dev returns the fund associated with a users address
   * @param addr users address

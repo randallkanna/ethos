@@ -165,7 +165,8 @@ class App extends Component {
     event.preventDefault();
     var inWei = this.state.web3.toWei(this.state.fundDonation, 'ether');
 
-    this.fundInstance.donateToFund(address,  {from: this.state.account, value: inWei});
+    this.fundInstance.donateToFund(address,  {from: this.state.account, value: inWei}); // , gas: 21000, gasPrice: this.state.web3.toWei(60, 'gwei')
+    // gas:21000, gasPrice: this.state.web3.toWei(60, 'gwei')
   }
 
   onSubmit(event) {
