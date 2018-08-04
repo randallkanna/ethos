@@ -167,14 +167,22 @@ class App extends Component {
     return this.setState({fundCount: this.state.funds.length})
   }
 
-  sendFunds(event, address, index) {
+  getFundByHash(ipfsStorageHash) {
+    const funds = this.state.completeFundList;
+
+    for (var i = 0; i < funds.length; i++) {
+      if (funds[i].ipfsStorageHash == ipfsStorageHash) {
+        return funds[i];
+      }
+    }
+  }
+
+  sendFunds(event, fund) {
     event.preventDefault();
     var inWei = this.state.web3.toWei(this.state.fundDonation, 'ether');
 
-    this.fundInstance.donateToFund(address,  {from: this.state.account, value: inWei, gas: 470000, gasPrice: this.state.web3.toWei(1, 'gwei')});
-
-    debugger;
-    // set storage here
+    this.fundInstance.donateToFund(fund.address, fund.ipfsStorageHash, {from: this.state.account, value: inWei, gas: 470000, gasPrice: this.state.web3.toWei(1, 'gwei')})
+    // var fundByHash = this.getFundByHash(fund.ipfsStorageHash); // exmample of how we would get the fund by hash here
   }
 
   onSubmit(event) {
@@ -215,8 +223,18 @@ class App extends Component {
     });
   }
 
-// TODO - comment this back in for fundsRaised later
-  // <p>This fund has raised {this.showFundsRaised(fund.address)} to date.</p>
+  showFundsRaised(fund) {
+    this.fundInstance.getFundsRaised.call(fund.ipfsStorageHash).then((results) => {
+      let fundsRaised = results.toString();
+
+      debugger;
+
+      return (
+        "Test"
+      )
+    })
+  }
+
   render() {
       const fundItems = this.state.completeFundList.map((fund, index) =>
         <div className="padding-top-sm padding-btm-sm" key={index}>
@@ -231,8 +249,11 @@ class App extends Component {
                   <Modal.Title>Donate</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
+                  <div>
+                    This fund has raised: {this.showFundsRaised(fund)} to date.
+                  </div>
                   <div> Want to donate to {fund.name}?
-                    <form onSubmit={(e) => {this.sendFunds(e, fund.address, index)}}>
+                    <form onSubmit={(e) => {this.sendFunds(e, fund)}}>
                     <input type="number" name="fundDonation" value={this.state.fundDonation} onChange={(e) => this.setStateValues(e)} />
                     <input type="submit" / >
                     </form>
