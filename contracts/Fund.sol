@@ -82,7 +82,6 @@ contract Fund is Pausable { // Library integration
   * @param addr address of the fund the user wants to send funds to
   */
   function donateToFund(address addr) public whenNotPaused payable {
-    require(owner != msg.sender);
     /* funds[addr].fundsRaised += msg.value; */
 
     addr.transfer(msg.value);
