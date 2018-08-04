@@ -27,6 +27,7 @@ class App extends Component {
       fundCount: '',
       funds: {},
       completeFundList: [],
+      currentFundHash: '',
       ipfsBuffer: null,
       ipfsDocumentHash: '',
       activeDonateModal: null,
@@ -131,19 +132,24 @@ class App extends Component {
   showAllFunds() {
     const ipfsHashList = this.state.funds;
     const ipfsFundData = [];
+    const currentComponent = this;
 
     if (ipfsHashList.length > 0) {
       var results = new Promise((resolve, reject) => {
         ipfsHashList.map(function(ipfsHash) {
+          currentComponent.setState({ currentFundHash: ipfsHash.hash });
           ipfs.files.cat(ipfsHash.hash, function (err, files) {
             if (err) {
               console.error(err);
               return;
             }
 
+            const ipfsStorageHash = currentComponent.state.currentFundHash;
             const fund = JSON.parse(files);
 
-            ipfsFundData.push(fund)
+            fund["ipfsStorageHash"] = ipfsStorageHash;
+
+            ipfsFundData.push(fund);
 
             resolve();
           })
@@ -161,11 +167,14 @@ class App extends Component {
     return this.setState({fundCount: this.state.funds.length})
   }
 
-  sendFunds(event, address) {
+  sendFunds(event, address, index) {
     event.preventDefault();
     var inWei = this.state.web3.toWei(this.state.fundDonation, 'ether');
 
     this.fundInstance.donateToFund(address,  {from: this.state.account, value: inWei, gas: 470000, gasPrice: this.state.web3.toWei(1, 'gwei')});
+
+    debugger;
+    // set storage here
   }
 
   onSubmit(event) {
@@ -197,6 +206,8 @@ class App extends Component {
           return;
         }
 
+        // randall
+
         this.fundInstance.createFund(result[0].hash, {from: this.state.account})
         this.addHash(result[0].hash);
         this.showAllFunds();
@@ -223,7 +234,7 @@ class App extends Component {
                 </Modal.Header>
                 <Modal.Body>
                   <div> Want to donate to {fund.name}?
-                    <form onSubmit={(e) => {this.sendFunds(e, fund.address)}}>
+                    <form onSubmit={(e) => {this.sendFunds(e, fund.address, index)}}>
                     <input type="number" name="fundDonation" value={this.state.fundDonation} onChange={(e) => this.setStateValues(e)} />
                     <input type="submit" / >
                     </form>
