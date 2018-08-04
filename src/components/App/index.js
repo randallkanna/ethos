@@ -206,8 +206,6 @@ class App extends Component {
           return;
         }
 
-        // randall
-
         this.fundInstance.createFund(result[0].hash, {from: this.state.account})
         this.addHash(result[0].hash);
         this.showAllFunds();
@@ -221,7 +219,7 @@ class App extends Component {
   // <p>This fund has raised {this.showFundsRaised(fund.address)} to date.</p>
   render() {
       const fundItems = this.state.completeFundList.map((fund, index) =>
-        <div key={index}>
+        <div className="padding-top-sm padding-btm-sm" key={index}>
           <Media>
             <Media.Left>
               <Button bsStyle="primary" bsSize="small" onClick={e => this.clickHandler(e, index)}>
