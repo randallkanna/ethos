@@ -15,5 +15,4 @@ contract TestFund {
 
     Assert.equal(simpleStorage.get(), expected, "It should store the value 89.");
   } */
-
 }

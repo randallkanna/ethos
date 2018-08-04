@@ -83,25 +83,25 @@ contract('Fund', function(accounts) {
     stop()
     Verifies that the contract does not allow users to call certain functions when the contract is stopped
   **/
-  it("should not allow a user to call certain functions while stopped", async () => {
-    await fund.stop();
-    await fund.set("ipfsHash");
-    let getipfshHash = await fund.get();
-    assert.equal(getipfshHash, "ipfsHash");
-  });
+  // it("should not allow a user to call certain functions while stopped", async () => {
+  //   await fund.stop();
+  //   await fund.set("ipfsHash");
+  //   let getipfshHash = await fund.get();
+  //   assert.equal(getipfshHash, "ipfsHash");
+  // });
 
   /**
     start()
     Verifies that the contract returns to normal state after the contract is restarted
   **/
-  it('should return to normal contract state after stop contract is over', async () => {
-    await fund.stop();
-    await fund.start();
-    await fund.set("ipfsHash")
-    let getipfshHash = await fund.get();
-
-    assert.equal(getipfshHash, "ipfsHash");
-  });
+  // it('should return to normal contract state after stop contract is over', async () => {
+  //   await fund.stop();
+  //   await fund.start();
+  //   await fund.set("ipfsHash")
+  //   let getipfshHash = await fund.get();
+  //
+  //   assert.equal(getipfshHash, "ipfsHash");
+  // });
 
   /**
     Removed because the contract no longer stores ether but instead transfers immediately
