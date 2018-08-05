@@ -147,6 +147,8 @@ export class FundItem extends Component {
                   <input type="number" name="fundDonation" value={this.state.fundDonation} onChange={(e) => this.setStateValues(e)} />
                   <input type="submit" / >
                   </form>
+
+                  Note: Refresh to see changes on the page.
                 </div>
                </Modal.Body>
               <Modal.Footer>
@@ -161,7 +163,7 @@ export class FundItem extends Component {
             </p>
             <a href={`https://ipfs.io/ipfs/${this.props.fund.fileUpload}`}>Additional File from Fund</a>
 
-            {this.renderDeleteFundButton()}
+            <div>{this.renderDeleteFundButton()}</div>
           </Media.Body>
         </Media>
       </div>

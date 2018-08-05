@@ -210,6 +210,8 @@ class App extends Component {
     });
   }
 
+  // <h3>{this.state.fundCount || 0} funds to contribute to currently.</h3> // removing this for now. not important
+  
   render() {
     const fundItems = this.state.completeFundList.map((fund, index) =>
       <FundItem fund={fund} index={index} key={index} />
@@ -222,7 +224,6 @@ class App extends Component {
           <Grid>
             <Row className="show-grid">
               <Col md={8}>
-                <h3>{this.state.fundCount || 0} funds to contribute to currently.</h3>
 
                 <h3>Funds</h3>
                   {fundItems}
@@ -232,7 +233,7 @@ class App extends Component {
                   <form onSubmit={this.onSubmit}>
                     Fund Name: <input type="text" name="fundName" value={this.state.fundName} onChange={(e) => this.setStateValues(e)} />
                     Fund Description: <input type="text" name="fundDescription" value={this.state.fundDescription} onChange={(e) => this.setStateValues(e)} />
-                    Document/Whitepaper/Image Upload: <input type="file" onChange={this.captureFile} />
+                    Document/Whitepaper/Image Upload: <input type="file" onChange={this.captureFile} /> Note: All fields are required.
                     <input type="submit" />
                   </form>
               </Col>
