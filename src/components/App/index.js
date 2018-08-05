@@ -4,6 +4,8 @@ import getWeb3 from '../../utils/getWeb3'
 import ipfs from '../../ipfs';
 import firebase from '../../firebase.js'
 
+import FundItem from '../FundItem/index.js'
+
 import Nav from '../../Navbar.js';
 import { Button, Row, Grid, Col, Media, Modal, } from 'react-bootstrap'
 
@@ -22,7 +24,6 @@ class App extends Component {
       account: null,
       fundName: '',
       fundDescription: '',
-      fundDonation: 0,
       ipfsHash: '',
       fundsRaised: '',
       fundCount: '',
@@ -31,17 +32,14 @@ class App extends Component {
       currentFundHash: '',
       ipfsBuffer: null,
       ipfsDocumentHash: '',
-      activeDonateModal: null,
     }
 
     this.fundsRef = firebase.database().ref('funds');
 
     this.setStateValues = this.setStateValues.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
-    this.sendFunds = this.sendFunds.bind(this);
     this.captureFile = this.captureFile.bind(this);
     this.clickHandler = this.clickHandler.bind(this);
-    this.hideDonateModal = this.hideDonateModal.bind(this);
     this.addHash = this.addHash.bind(this);
   }
 
@@ -106,10 +104,6 @@ class App extends Component {
     this.setState({ activeDonateModal: index })
   }
 
-  hideDonateModal() {
-    this.setState({ activeDonateModal: null })
-  }
-
   setStateValues(event) {
      this.setState({[event.target.name]: event.target.value})
   }
@@ -138,14 +132,14 @@ class App extends Component {
     if (ipfsHashList.length > 0) {
       var results = new Promise((resolve, reject) => {
         ipfsHashList.map(function(ipfsHash) {
-          currentComponent.setState({ currentFundHash: ipfsHash.hash });
+          var hash = ipfsHash.hash;
           ipfs.files.cat(ipfsHash.hash, function (err, files) {
             if (err) {
               console.error(err);
               return;
             }
 
-            const ipfsStorageHash = currentComponent.state.currentFundHash;
+            const ipfsStorageHash = hash;
             const fund = JSON.parse(files);
 
             fund["ipfsStorageHash"] = ipfsStorageHash;
@@ -176,14 +170,6 @@ class App extends Component {
         return funds[i];
       }
     }
-  }
-
-  sendFunds(event, fund) {
-    event.preventDefault();
-    var inWei = this.state.web3.toWei(this.state.fundDonation, 'ether');
-
-    this.fundInstance.donateToFund(fund.address, fund.ipfsStorageHash, {from: this.state.account, value: inWei, gas: 470000, gasPrice: this.state.web3.toWei(1, 'gwei')})
-    // var fundByHash = this.getFundByHash(fund.ipfsStorageHash); // exmample of how we would get the fund by hash here
   }
 
   onSubmit(event) {
@@ -224,58 +210,10 @@ class App extends Component {
     });
   }
 
-  // showFundsRaised(fund) {
-  //   const fundsRaised = this.fundInstance.getFundsRaised.call(fund.ipfsStorageHash, (error, result) => {
-  //     debugger;
-  //     // return result.toString();
-  //   })
-  //
-  //   return (
-  //     {fundsRaised}
-  //   )
-  //   // debugger;
-  //
-  // }
-
-  // This fund has raised: {this.showFundsRaised(fund)} to date.
   render() {
-      const fundItems = this.state.completeFundList.map((fund, index) =>
-        <div className="padding-top-sm padding-btm-sm" key={index}>
-          <Media>
-            <Media.Left>
-              <Button bsStyle="primary" bsSize="small" onClick={e => this.clickHandler(e, index)}>
-                Donate
-              </Button>
-
-              <Modal id={index} show={this.state.activeDonateModal === index} onHide={this.hideDonateModal}>
-                <Modal.Header closeButton>
-                  <Modal.Title>Donate</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                  <div>
-                  </div>
-
-                  <div> Want to donate to {fund.name}?
-                    <form onSubmit={(e) => {this.sendFunds(e, fund)}}>
-                    <input type="number" name="fundDonation" value={this.state.fundDonation} onChange={(e) => this.setStateValues(e)} />
-                    <input type="submit" / >
-                    </form>
-                  </div>
-                 </Modal.Body>
-                <Modal.Footer>
-                </Modal.Footer>
-              </Modal>
-            </Media.Left>
-            <Media.Body>
-              <Media.Heading>{fund.name}</Media.Heading>
-              <p>
-                {fund.description}
-              </p>
-              <a href={`https://ipfs.io/ipfs/${fund.fileUpload}`}>Additional File from Fund</a>
-            </Media.Body>
-          </Media>
-        </div>
-      );
+    const fundItems = this.state.completeFundList.map((fund, index) =>
+      <FundItem fund={fund} index={index} key={index} />
+    );
 
     return (
       <div className="nav-bar-custom">
