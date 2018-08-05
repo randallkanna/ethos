@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import getWeb3 from '../../utils/getWeb3'
 import FundContract from '../../../build/contracts/Fund.json'
+import firebase from '../../firebase.js'
 import { Button, Row, Grid, Col, Media, Modal, } from 'react-bootstrap'
 
 export class FundItem extends Component {
@@ -12,13 +13,19 @@ export class FundItem extends Component {
       fundDonation: 0,
       currentFundsRaised: 0,
       web3: null,
+      isFundOwner: false,
     }
+
+    this.fundsRef = firebase.database().ref('funds');
 
     this.clickHandler = this.clickHandler.bind(this);
     this.hideDonateModal = this.hideDonateModal.bind(this);
     this.sendFunds = this.sendFunds.bind(this);
     this.setStateValues = this.setStateValues.bind(this);
     this.updateFundsRaised = this.updateFundsRaised.bind(this);
+    this.deleteFund = this.deleteFund.bind(this);
+    this.findCurrentAccount = this.findCurrentAccount.bind(this);
+    this.renderDeleteFundButton = this.renderDeleteFundButton.bind(this);
   }
 
   instantiateContract() {
@@ -37,6 +44,12 @@ export class FundItem extends Component {
           const ethRaised = this.state.web3.fromWei(result, 'ether')
           this.setState({currentFundsRaised: ethRaised.toString()});
         })
+      }).then(() => {
+        var account = this.state.web3.eth.accounts[0];
+
+        if (account === this.props.fund.address) {
+          this.setState({ isFundOwner: true })
+        }
       })
     })
   }
@@ -79,6 +92,26 @@ export class FundItem extends Component {
     })
   }
 
+  findCurrentAccount(fundAddress) {
+    var account = this.state.web3.eth.accounts[0];
+
+    if (account === fundAddress) {
+      return true;
+    }
+  }
+
+  deleteFund() {
+    const fund = this.props.fund;
+    const funds = this.fundsRef;
+
+    var query = funds.orderByChild('hash').equalTo(fund.ipfsStorageHash);
+
+    query.on('child_added', function(snapshot) {
+      snapshot.ref.remove();
+      alert("Your fund has been deleted! Refresh the page to see changes");
+    })
+  }
+
   clickHandler(e, index) {
     this.setState({ activeDonateModal: index })
   }
@@ -87,6 +120,13 @@ export class FundItem extends Component {
     this.setState({ activeDonateModal: null })
   }
 
+  renderDeleteFundButton() {
+    if (this.state.isFundOwner) {
+      return (
+        <Button onClick={this.deleteFund}>Delete my Fund</Button>
+      )
+    }
+  }
 
   render() {
     return (
@@ -120,6 +160,8 @@ export class FundItem extends Component {
               {this.props.fund.description}
             </p>
             <a href={`https://ipfs.io/ipfs/${this.props.fund.fileUpload}`}>Additional File from Fund</a>
+
+            {this.renderDeleteFundButton()}
           </Media.Body>
         </Media>
       </div>
