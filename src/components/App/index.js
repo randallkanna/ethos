@@ -132,14 +132,14 @@ class App extends Component {
     if (ipfsHashList.length > 0) {
       var results = new Promise((resolve, reject) => {
         ipfsHashList.map(function(ipfsHash) {
-          currentComponent.setState({ currentFundHash: ipfsHash.hash });
+          var hash = ipfsHash.hash;
           ipfs.files.cat(ipfsHash.hash, function (err, files) {
             if (err) {
               console.error(err);
               return;
             }
 
-            const ipfsStorageHash = currentComponent.state.currentFundHash;
+            const ipfsStorageHash = hash;
             const fund = JSON.parse(files);
 
             fund["ipfsStorageHash"] = ipfsStorageHash;

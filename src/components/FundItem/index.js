@@ -63,6 +63,9 @@ export class FundItem extends Component {
     event.preventDefault();
     var inWei = this.state.web3.toWei(this.state.fundDonation, 'ether');
 
+    console.log("this is the hash")
+    console.log(fund.ipfsStorageHash)
+
     // var fundByHash = this.getFundByHash(fund.ipfsStorageHash); // exmample of how we would get the fund by hash here
     this.fundInstance.donateToFund(fund.address, fund.ipfsStorageHash, {from: this.state.account, value: inWei, gas: 470000, gasPrice: this.state.web3.toWei(1, 'gwei')}).then(() => {
       this.updateFundsRaised();
