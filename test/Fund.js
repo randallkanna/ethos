@@ -21,7 +21,7 @@ contract('Fund', function(accounts) {
 
     await fund.createFund(ipfsHash, {from: fundOwner});
 
-    const storedFundHash = await fund.getFundHashByAddress(fundOwner);
+    const storedFundHash = await fund.getFundForHash(ipfsHash);
 
     assert.strictEqual(storedFundHash, ipfsHash, 'fund was stored properly');
   });
@@ -36,7 +36,7 @@ contract('Fund', function(accounts) {
 
     var senderOriginalBalance = web3.eth.getBalance(donater).toNumber();
 
-    let transaction = await fund.donateToFund(fundOwner, {from: donater, value: fundDeposit});
+    let transaction = await fund.donateToFund(fundOwner, ipfsHash, {from: donater, value: fundDeposit});
 
     var senderNewBalance = web3.eth.getBalance(donater).toNumber();
     var tx = await web3.eth.getTransaction(transaction.tx);
@@ -55,7 +55,7 @@ contract('Fund', function(accounts) {
     const ipfsHash = "testABC123";
 
     await fund.createFund(ipfsHash, {from: fundOwner});
-    await fund.donateToFund(fundOwner, {from: donater, value: fundDeposit});
+    await fund.donateToFund(fundOwner, ipfsHash, {from: donater, value: fundDeposit});
 
     fundBalanceAccount = web3.eth.getBalance(fundOwner).toNumber();
 
@@ -77,6 +77,22 @@ contract('Fund', function(accounts) {
     } catch(error) {
       assert.ok(true, 'expected throw')
     }
+  });
+
+  /**
+    This test verifies that a user can check how much a fund has raised
+  **/
+  it("should return how much a users fund has raised so far", async() => {
+    const fundDeposit = web3.toBigNumber(2);
+    const ipfsHash = "testABC";
+
+    await fund.createFund(ipfsHash, {from: fundOwner});
+
+    await fund.donateToFund(fundOwner, ipfsHash, {from: donater, value: fundDeposit});
+
+    var fundsRaised = await fund.getFundsRaised(ipfsHash)
+
+    assert.equal(fundsRaised.toString(), fundDeposit.toString(), 'should return the amount the user has raised in funding');
   });
 
   /**

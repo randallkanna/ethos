@@ -14,6 +14,14 @@ body {
   position: relative;
 }
 
+.padding-top-sm {
+  padding-top: 10px;
+}
+
+.padding-btm-sm {
+  padding-bottom: 10px;
+}
+
 /** overriding all the bootstrap stuff **/
 .navbar {
   z-index: 10;

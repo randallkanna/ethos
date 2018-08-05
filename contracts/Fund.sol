@@ -15,7 +15,7 @@ contract Fund is Pausable { // Library integration
   string ipfsHash;
   /* bool public stopped = false; // paused */ // removed because I'm using pausable
 
-  mapping(address => FundStorage) public funds;
+  mapping(string => FundStorage) private funds;
   mapping (address => uint) private balances;
 
   // commenting this out because I mvoed to pausable
@@ -59,32 +59,26 @@ contract Fund is Pausable { // Library integration
     return ipfsHash;
   }
 
-  /* // randall TODO document this
-  function getFundsRaised(address addr) public view whenNotPaused returns (uint) {
-    return funds[addr].fundsRaised;
-  } */
-
-  /** @dev returns the fund associated with a users address
-  * @param addr users address
-  */
-  function getFundHashByAddress(address addr) public view whenNotPaused returns (string) {
-     return funds[addr].ipfsHash;
+  /** @dev returns the total funds raised by a user fund
+  @param ipfs string of the ipfs hash
+  **/
+  function getFundsRaised(string ipfs) public constant whenNotPaused returns (uint) {
+    return funds[ipfs].fundsRaised;
   }
 
   /** @dev Stores a ipfsHash of the users fund in a struct
   * @param ipfs string of the IPFS hash.
   */
   function createFund(string ipfs) public whenNotPaused {
-    funds[msg.sender] = FundStorage({ipfsHash: ipfs, fundCreator: msg.sender, fundsRaised: 0});
+    funds[ipfs] = FundStorage({ipfsHash: ipfs, fundCreator: msg.sender, fundsRaised: 0});
   }
 
   /** @dev Stores a ipfsHash of the users fund in a struct
   * @param addr address of the fund the user wants to send funds to
   */
-  function donateToFund(address addr) public whenNotPaused payable {
-    /* funds[addr].fundsRaised += msg.value; */
-
+  function donateToFund(address addr, string ipfsStorageHash) public whenNotPaused payable {
     addr.transfer(msg.value);
+    funds[ipfsStorageHash].fundsRaised += msg.value;
   }
 
   // commenting this out for now - not needed for now
@@ -96,6 +90,13 @@ contract Fund is Pausable { // Library integration
 
     msg.sender.transfer(withdrawAmount);
   } */
+
+  /** @dev returns the fund associated with a ipfs hash
+  * @param ipfs string of the ipfs hash
+  */
+  function getFundForHash(string ipfs) public view whenNotPaused returns (string) {
+     return funds[ipfs].ipfsHash;
+  }
 
   /** @dev Returns the users funds
   */

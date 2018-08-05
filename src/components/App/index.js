@@ -24,9 +24,11 @@ class App extends Component {
       fundDescription: '',
       fundDonation: 0,
       ipfsHash: '',
+      fundsRaised: '',
       fundCount: '',
       funds: {},
       completeFundList: [],
+      currentFundHash: '',
       ipfsBuffer: null,
       ipfsDocumentHash: '',
       activeDonateModal: null,
@@ -131,19 +133,24 @@ class App extends Component {
   showAllFunds() {
     const ipfsHashList = this.state.funds;
     const ipfsFundData = [];
+    const currentComponent = this;
 
     if (ipfsHashList.length > 0) {
       var results = new Promise((resolve, reject) => {
         ipfsHashList.map(function(ipfsHash) {
+          currentComponent.setState({ currentFundHash: ipfsHash.hash });
           ipfs.files.cat(ipfsHash.hash, function (err, files) {
             if (err) {
               console.error(err);
               return;
             }
 
+            const ipfsStorageHash = currentComponent.state.currentFundHash;
             const fund = JSON.parse(files);
 
-            ipfsFundData.push(fund)
+            fund["ipfsStorageHash"] = ipfsStorageHash;
+
+            ipfsFundData.push(fund);
 
             resolve();
           })
@@ -161,11 +168,22 @@ class App extends Component {
     return this.setState({fundCount: this.state.funds.length})
   }
 
-  sendFunds(event, address) {
+  getFundByHash(ipfsStorageHash) {
+    const funds = this.state.completeFundList;
+
+    for (var i = 0; i < funds.length; i++) {
+      if (funds[i].ipfsStorageHash == ipfsStorageHash) {
+        return funds[i];
+      }
+    }
+  }
+
+  sendFunds(event, fund) {
     event.preventDefault();
     var inWei = this.state.web3.toWei(this.state.fundDonation, 'ether');
 
-    this.fundInstance.donateToFund(address,  {from: this.state.account, value: inWei, gas: 470000, gasPrice: this.state.web3.toWei(1, 'gwei')});
+    this.fundInstance.donateToFund(fund.address, fund.ipfsStorageHash, {from: this.state.account, value: inWei, gas: 470000, gasPrice: this.state.web3.toWei(1, 'gwei')})
+    // var fundByHash = this.getFundByHash(fund.ipfsStorageHash); // exmample of how we would get the fund by hash here
   }
 
   onSubmit(event) {
@@ -206,11 +224,23 @@ class App extends Component {
     });
   }
 
-// TODO - comment this back in for fundsRaised later
-  // <p>This fund has raised {this.showFundsRaised(fund.address)} to date.</p>
+  // showFundsRaised(fund) {
+  //   const fundsRaised = this.fundInstance.getFundsRaised.call(fund.ipfsStorageHash, (error, result) => {
+  //     debugger;
+  //     // return result.toString();
+  //   })
+  //
+  //   return (
+  //     {fundsRaised}
+  //   )
+  //   // debugger;
+  //
+  // }
+
+  // This fund has raised: {this.showFundsRaised(fund)} to date.
   render() {
       const fundItems = this.state.completeFundList.map((fund, index) =>
-        <div key={index}>
+        <div className="padding-top-sm padding-btm-sm" key={index}>
           <Media>
             <Media.Left>
               <Button bsStyle="primary" bsSize="small" onClick={e => this.clickHandler(e, index)}>
@@ -222,8 +252,11 @@ class App extends Component {
                   <Modal.Title>Donate</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
+                  <div>
+                  </div>
+
                   <div> Want to donate to {fund.name}?
-                    <form onSubmit={(e) => {this.sendFunds(e, fund.address)}}>
+                    <form onSubmit={(e) => {this.sendFunds(e, fund)}}>
                     <input type="number" name="fundDonation" value={this.state.fundDonation} onChange={(e) => this.setStateValues(e)} />
                     <input type="submit" / >
                     </form>
