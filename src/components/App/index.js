@@ -224,15 +224,40 @@ class App extends Component {
   }
 
   showFundsRaised(fund) {
-    this.fundInstance.getFundsRaised.call(fund.ipfsStorageHash).then((results) => {
-      let fundsRaised = results.toString();
+    var results = new Promise((resolve, reject) => {
+      this.fundInstance.getFundsRaised.call(fund.ipfsStorageHash).then((result) => {
+        return result;
+      })
 
-      debugger;
+      resolve();
+    });
+
+    results.then(() => {
+      debugger
 
       return (
-        "Test"
+        "test"
       )
-    })
+    });
+
+
+
+    // debugger;
+    // this.fundInstance.getFundsRaised.call(fund.ipfsStorageHash, (error, result) => {
+    //   var fundAmount = result.toString();
+    //
+    //   debugger;
+    //   return (
+    //     "Test"
+    //   )
+    // })
+    // this.fundInstance.getFundsRaised.call(fund.ipfsStorageHash).then((result) => {
+    //   var funding = result.toString();
+    //
+    //   return (
+    //     "Test"
+    //   )
+    // })
   }
 
   render() {
@@ -250,7 +275,6 @@ class App extends Component {
                 </Modal.Header>
                 <Modal.Body>
                   <div>
-                    This fund has raised: {this.showFundsRaised(fund)} to date.
                   </div>
                   <div> Want to donate to {fund.name}?
                     <form onSubmit={(e) => {this.sendFunds(e, fund)}}>
@@ -265,6 +289,7 @@ class App extends Component {
             </Media.Left>
             <Media.Body>
               <Media.Heading>{fund.name}</Media.Heading>
+                This fund has raised: {this.showFundsRaised(fund)} to date.
               <p>
                 {fund.description}
               </p>
