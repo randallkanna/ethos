@@ -24,6 +24,7 @@ class App extends Component {
       fundDescription: '',
       fundDonation: 0,
       ipfsHash: '',
+      fundsRaised: '',
       fundCount: '',
       funds: {},
       completeFundList: [],
@@ -224,40 +225,16 @@ class App extends Component {
   }
 
   showFundsRaised(fund) {
-    var results = new Promise((resolve, reject) => {
-      this.fundInstance.getFundsRaised.call(fund.ipfsStorageHash).then((result) => {
-        return result;
-      })
+    const fundsRaised = this.fundInstance.getFundsRaised.call(fund.ipfsStorageHash, (error, result) => {
+      debugger;
+      // return result.toString();
+    })
 
-      resolve();
-    });
-
-    results.then(() => {
-      debugger
-
-      return (
-        "test"
-      )
-    });
-
-
-
+    return (
+      {fundsRaised}
+    )
     // debugger;
-    // this.fundInstance.getFundsRaised.call(fund.ipfsStorageHash, (error, result) => {
-    //   var fundAmount = result.toString();
-    //
-    //   debugger;
-    //   return (
-    //     "Test"
-    //   )
-    // })
-    // this.fundInstance.getFundsRaised.call(fund.ipfsStorageHash).then((result) => {
-    //   var funding = result.toString();
-    //
-    //   return (
-    //     "Test"
-    //   )
-    // })
+
   }
 
   render() {
@@ -276,6 +253,8 @@ class App extends Component {
                 <Modal.Body>
                   <div>
                   </div>
+                  This fund has raised: {this.showFundsRaised(fund)} to date.
+
                   <div> Want to donate to {fund.name}?
                     <form onSubmit={(e) => {this.sendFunds(e, fund)}}>
                     <input type="number" name="fundDonation" value={this.state.fundDonation} onChange={(e) => this.setStateValues(e)} />
@@ -289,7 +268,6 @@ class App extends Component {
             </Media.Left>
             <Media.Body>
               <Media.Heading>{fund.name}</Media.Heading>
-                This fund has raised: {this.showFundsRaised(fund)} to date.
               <p>
                 {fund.description}
               </p>
