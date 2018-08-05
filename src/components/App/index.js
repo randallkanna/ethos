@@ -224,19 +224,20 @@ class App extends Component {
     });
   }
 
-  showFundsRaised(fund) {
-    const fundsRaised = this.fundInstance.getFundsRaised.call(fund.ipfsStorageHash, (error, result) => {
-      debugger;
-      // return result.toString();
-    })
+  // showFundsRaised(fund) {
+  //   const fundsRaised = this.fundInstance.getFundsRaised.call(fund.ipfsStorageHash, (error, result) => {
+  //     debugger;
+  //     // return result.toString();
+  //   })
+  //
+  //   return (
+  //     {fundsRaised}
+  //   )
+  //   // debugger;
+  //
+  // }
 
-    return (
-      {fundsRaised}
-    )
-    // debugger;
-
-  }
-
+  // This fund has raised: {this.showFundsRaised(fund)} to date.
   render() {
       const fundItems = this.state.completeFundList.map((fund, index) =>
         <div className="padding-top-sm padding-btm-sm" key={index}>
@@ -253,7 +254,6 @@ class App extends Component {
                 <Modal.Body>
                   <div>
                   </div>
-                  This fund has raised: {this.showFundsRaised(fund)} to date.
 
                   <div> Want to donate to {fund.name}?
                     <form onSubmit={(e) => {this.sendFunds(e, fund)}}>
