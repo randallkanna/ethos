@@ -34,7 +34,8 @@ export class FundItem extends Component {
         return this.fundInstance.get.call(accounts[0])
       }).then(() => {
         this.fundInstance.getFundsRaised.call(this.props.fund.ipfsStorageHash).then((result) => {
-          this.setState({currentFundsRaised: result.toString()});
+          const ethRaised = this.state.web3.fromWei(result, 'ether')
+          this.setState({currentFundsRaised: ethRaised.toString()});
         })
       })
     })
@@ -70,7 +71,8 @@ export class FundItem extends Component {
 
   updateFundsRaised() {
     this.fundInstance.getFundsRaised.call(this.props.fund.ipfsStorageHash).then((result) => {
-      this.setState({currentFundsRaised: result.toString()});
+      const ethRaised = this.state.web3.fromWei(result, 'ether')
+      this.setState({currentFundsRaised: ethRaised.toString()});
     })
   }
 
@@ -97,9 +99,6 @@ export class FundItem extends Component {
                 <Modal.Title>Donate</Modal.Title>
               </Modal.Header>
               <Modal.Body>
-                <div>
-                </div>
-
                 <div> Want to donate to {this.props.fund.name}?
                   <form onSubmit={(e) => {this.sendFunds(e, this.props.fund)}}>
                   <input type="number" name="fundDonation" value={this.state.fundDonation} onChange={(e) => this.setStateValues(e)} />
@@ -113,7 +112,7 @@ export class FundItem extends Component {
           </Media.Left>
           <Media.Body>
             <Media.Heading>{this.props.fund.name}</Media.Heading>
-              This fund has raised: {this.state.currentFundsRaised} to date.
+              This fund has raised {this.state.currentFundsRaised} Ether to date.
             <p>
               {this.props.fund.description}
             </p>
