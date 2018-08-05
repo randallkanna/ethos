@@ -1,0 +1,9 @@
+Deployed contract
+
+Removed import from zeppelin and pausable.
+
+https://rinkeby.etherscan.io/tx/0xf4c918841e7b98aa9573c64c308dfcf9c36cd7a182ec271a05eb9e28b2c5db51
+
+0x517babea53c1cdcca12cf1718c2e4ec5bd04120d
+
+https://rinkeby.etherscan.io/tx/0xf4c918841e7b98aa9573c64c308dfcf9c36cd7a182ec271a05eb9e28b2c5db51
