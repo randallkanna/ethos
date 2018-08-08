@@ -27,3 +27,5 @@ And next: ``migrate``
 ``npm start``
 
 2. This will start the front-end at http://localhost:3000/.
+
+3. Make sure you're using the proper metamask setup! It needs to match what is in the truffle js file. http://127.0.0.0.1:9545
